@@ -16,7 +16,7 @@ It combines **Python logic** and **MySQL database** to automatically assemble da
 ✅ Generates a 7-day plan (2 meals per day)  
 ✅ Calculates total calories and protein for each day  
 ✅ Follows the 16:8 intermittent fasting schedule  
-✅ Flexible food database (main, protein, vegetable, fruit, fat, dairy)  
+✅ Flexible food database (main, protein, vegetable, fruit, oil, dairy)  
 ✅ Ready to expand for nutrition tracking and fitness data
 
 ---
@@ -34,9 +34,9 @@ It combines **Python logic** and **MySQL database** to automatically assemble da
 | `protein` | Meat and protein sources | id, name, calorie, protein |
 | `vegetable` | Vegetables | id, name, calorie, protein |
 | `fruit` | Fruits | id, name, calorie, protein |
-| `fat` | Oils and fats | id, name, calorie, protein |
+| `oil` | Oils and fats | id, name, calorie, protein |
 | `dairy` | Dairy products | id, name, calorie, protein |
-| `meal_plan` | Daily meal plan table | id, date, meal_type, main_id, protein_id, vegetable_id, fruit_id, fat_id, dairy_id, total_calorie, total_protein |
+| `meal_plan` | Daily meal plan table | id, date, meal_type, main_id, protein_id, vegetable_id, fruit_id, oil_id, dairy_id, total_calorie, total_protein |
 
 ---
 
