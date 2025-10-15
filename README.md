@@ -42,11 +42,11 @@ It combines **Python logic** and **MySQL database** to automatically assemble da
 
 ## Future Expansion
 
-🔹 Add `Carbohydrate` and `Fat` tracking  
-🔹 Add `weight` and `fitness` record tables  
-🔹 Generate automatic charts for weight and calories  
-🔹 Add a “recipe recommendation” system based on selected food combinations  
-🔹 Generate daily/weekly/monthly completion badges  
+· Add `Carbohydrate` and `Fat` tracking  
+· Add `weight` and `fitness` record tables  
+· Generate automatic charts for weight and calories  
+· Add a “recipe recommendation” system based on selected food combinations  
+· Generate daily/weekly/monthly completion badges  
 
 ---
 
