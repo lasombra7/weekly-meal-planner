@@ -13,11 +13,11 @@ It combines **Python logic** and **MySQL database** to automatically assemble da
 
 ## Features (Current Phase)
 
-✅ Generates a 7-day plan (2 meals per day)  
-✅ Calculates total calories and protein for each day  
-✅ Follows the 16:8 intermittent fasting schedule  
-✅ Flexible food database (main, protein, vegetable, fruit, oil, dairy)  
-✅ Ready to expand for nutrition tracking and fitness data
+· Generates a 7-day plan (2 meals per day)  
+· Calculates total calories and protein for each day  
+· Follows the 16:8 intermittent fasting schedule  
+· Flexible food database (main, protein, vegetable, fruit, oil, dairy)  
+· Ready to expand for nutrition tracking and fitness data
 
 ---
 
