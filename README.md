@@ -68,17 +68,42 @@ It’s also a foundation for building a **health-oriented AI assistant** that pl
 
 ## Project Plan
 
-### Phase 1: Database Design
-- Built 8 tables: main, protein, vegetable, fruit, oil, seasoning, dairy, meal_plan
-- Added sample data in `data.sql`
-- Supports Chinese input and floating-point nutrition data
+### ~~Phase 1: Database Design~~
+- ~~Built 8 tables: main, protein, vegetable, fruit, oil, seasoning, dairy, meal_plan~~
+- ~~Added sample data in `data.sql`~~
+- ~~Supports Chinese input and floating-point nutrition data~~
 
-### Phase 2: Python Integration 
-- Connect MySQL with Python (using `mysql.connector`)
-- Implement random meal generator (1 main + 1 protein + 1 vegetable)
+### <span style="color:red">Phase 2: Python Integration (In Progress)</span>
+**Goal:**  
+Use Python to connect with the MySQL database and automatically generate weekly meal plans.
 
-### Phase 3: User Features 
-- Add calorie/protein summary per meal
-- Track weekly meal plan automatically
-- Add optional seasoning table for detailed calorie tracking
+**Requirements:**  
+- 7-day meal plan, 2 meals per day (lunch and dinner)  
+- Daily protein: **130–150 g**  
+- Daily calories: **1800–2000 kcal**  
+- Each meal: around **700 kcal**, not exceeding 850 kcal  
+- Optional daily snack: **200–300 kcal**  
+- Weekly total ingredients: **15–20 kinds**
+  - Main: 3–4  
+  - Protein: 3–6  
+  - Vegetable: 4–6  
+  - Fruit: 2–4  
+  - Oil: 1–3  
+  - Dairy: 1–2
+
+**Next Steps:**  
+- [x] Connect Python to MySQL  
+- [ ] Randomly select one food per category to form each meal  
+- [ ] Calculate total daily calories and protein  
+- [ ] Generate full 7-day meal plans  
+- [ ] Save results to the `meal_plan` table  
+
+---
+
+### Phase 3: Future Development
+- Add calorie and protein tracking by weight  
+- Record user fitness and weight progress  
+- Implement visual charts for calories, protein, and progress trends  
+- Add recipe recommendation system 
+
 
