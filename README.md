@@ -30,12 +30,12 @@ It combines **Python logic** and **MySQL database** to automatically assemble da
 ### Database Tables
 | Table | Description | Columns |
 |--------|--------------|----------|
-| `main` | Staple food items | id, name, calorie, protein |
-| `protein` | Meat and protein sources | id, name, calorie, protein |
-| `vegetable` | Vegetables | id, name, calorie, protein |
-| `fruit` | Fruits | id, name, calorie, protein |
-| `oil` | Oils and fats | id, name, calorie, protein |
-| `dairy` | Dairy products | id, name, calorie, protein |
+| `main` | Staple food items | id, name, weight, calorie, protein |
+| `protein` | Meat and protein sources | id, name, weight, calorie, protein |
+| `vegetable` | Vegetables | id, name, weight, calorie, protein |
+| `fruit` | Fruits | id, name, weight, calorie, protein |
+| `oil` | Oils and fats | id, name, weignt, calorie, protein |
+| `dairy` | Dairy products | id, name, weight, calorie, protein |
 | `meal_plan` | Daily meal plan table | id, date, meal_type, main_id, protein_id, vegetable_id, fruit_id, oil_id, dairy_id, total_calorie, total_protein |
 
 ---
