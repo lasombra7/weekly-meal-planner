@@ -35,8 +35,9 @@ It combines **Python logic** and **MySQL database** to automatically assemble da
 | `vegetable` | Vegetables | id, name, weight, calorie, protein |
 | `fruit` | Fruits | id, name, weight, calorie, protein |
 | `oil` | Oils and fats | id, name, weignt, calorie, protein |
+| `seasoning` | Decorating the dish | id, name, weignt, calorie, protein |
 | `dairy` | Dairy products | id, name, weight, calorie, protein |
-| `meal_plan` | Daily meal plan table | id, date, meal_type, main_id, protein_id, vegetable_id, fruit_id, oil_id, dairy_id, total_calorie, total_protein |
+| `meal_plan` | Daily meal plan table | id, date, meal_type, main_id, protein_id, vegetable_id, fruit_id, oil_id, seasoning_id, dairy_id, total_calorie, total_protein |
 
 ---
 
