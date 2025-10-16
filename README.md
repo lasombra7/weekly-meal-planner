@@ -1,13 +1,8 @@
 # Weekly Meal Planner
 
-A Python + SQL based project that automatically generates balanced weekly meal plans according to nutritional goals and personal preferences.
+A Python + MySQL project that automatically generates balanced weekly meal plans based on calorie and protein goals.  
+It helps users design healthy and efficient meal schedules, combining Python logic and database automation.
 
----
-
-## Overview
-
-This project aims to **help users design healthy and efficient meal plans** for every week.  
-It combines **Python logic** and **MySQL database** to automatically assemble daily menus based on calorie, protein, and fasting goals.
 
 ---
 
@@ -34,20 +29,11 @@ It combines **Python logic** and **MySQL database** to automatically assemble da
 | `protein` | Meat and protein sources | id, name, weight, calorie, protein |
 | `vegetable` | Vegetables | id, name, weight, calorie, protein |
 | `fruit` | Fruits | id, name, weight, calorie, protein |
-| `oil` | Oils and fats | id, name, weignt, calorie, protein |
-| `seasoning` | Decorating the dish | id, name, weignt, calorie, protein |
+| `oil` | Oils and fats | id, name, weight, calorie, protein |
+| `seasoning` | Decorating the dish | id, name, weight, calorie, protein |
 | `dairy` | Dairy products | id, name, weight, calorie, protein |
 | `meal_plan` | Daily meal plan table | id, date, meal_type, main_id, protein_id, vegetable_id, fruit_id, oil_id, seasoning_id, dairy_id, total_calorie, total_protein |
 
----
-
-## Future Expansion
-
-· Add `Carbohydrate` and `Fat` tracking  
-· Add `weight` and `fitness` record tables  
-· Generate automatic charts for weight and calories  
-· Add a “recipe recommendation” system based on selected food combinations  
-· Generate daily/weekly/monthly completion badges  
 
 ---
 
