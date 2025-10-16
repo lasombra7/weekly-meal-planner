@@ -65,3 +65,20 @@ It’s also a foundation for building a **health-oriented AI assistant** that pl
 3. Write a function to assemble daily meals  
 4. Add nutritional analysis & visualization  
 
+
+## Project Plan
+
+### Phase 1: Database Design
+- Built 8 tables: main, protein, vegetable, fruit, oil, seasoning, dairy, meal_plan
+- Added sample data in `data.sql`
+- Supports Chinese input and floating-point nutrition data
+
+### Phase 2: Python Integration 
+- Connect MySQL with Python (using `mysql.connector`)
+- Implement random meal generator (1 main + 1 protein + 1 vegetable)
+
+### Phase 3: User Features 
+- Add calorie/protein summary per meal
+- Track weekly meal plan automatically
+- Add optional seasoning table for detailed calorie tracking
+
