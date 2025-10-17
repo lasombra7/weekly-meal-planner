@@ -25,14 +25,14 @@ It helps users design healthy and efficient meal schedules, combining Python log
 ### Database Tables
 | Table | Description | Columns |
 |--------|--------------|----------|
-| `main` | Staple food items | id, name, weight, calorie, protein |
-| `protein` | Meat and protein sources | id, name, weight, calorie, protein |
-| `vegetable` | Vegetables | id, name, weight, calorie, protein |
-| `fruit` | Fruits | id, name, weight, calorie, protein |
-| `oil` | Oils and fats | id, name, weight, calorie, protein |
+| `main` | Staple food items | id, name, type, weight, calorie, protein |
+| `protein` | Meat and protein sources | id, name, type, weight, calorie, protein |
+| `vegetable` | Vegetables | id, name, type, weight, calorie, protein |
+| `fruit` | Fruits | id, name, type, weight, calorie, protein |
+| `oil` | Oils and fats | id, name, type, weight, calorie, protein |
 | `seasoning` | Decorating the dish | id, name, weight, calorie, protein |
-| `dairy` | Dairy products | id, name, weight, calorie, protein |
-| `meal_plan` | Daily meal plan table | id, date, meal_type, main_id, protein_id, vegetable_id, fruit_id, oil_id, seasoning_id, dairy_id, total_calorie, total_protein |
+| `dairy` | Dairy products | id, name, type, weight, calorie, protein |
+| `meal_plan` | Daily meal plan table | id, date, meal_type, main_id, protein_id, vegetable_id, fruit_id, oil_id, seasoning_id, dairy_id, total_calorie, total_protein, total_type |
 
 
 ---
