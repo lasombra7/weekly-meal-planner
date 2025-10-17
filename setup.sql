@@ -119,3 +119,14 @@ protein float comment '单位：g'
 alter table meal_plan
 add column seasoning_id char(5) after oil_id;
 
+-- 新增type列用于后期统计每周15-20种食物，seasoning 不算做统计。
+alter table main add column type varchar(20) after name;
+alter table protein add column type varchar(20) after name;
+alter table vegetable add column type varchar(20) after name;
+alter table fruit add column type varchar(20) after name;
+alter table oil add column type varchar(20) after name;
+alter table dairy add column type varchar(20) after name;
+
+-- 在meal plan 里新增total type 的统计
+alter table meal_plan add column total_type int;
+describe meal_plan;

@@ -46,3 +46,19 @@ values
 ('D1', '100g 酸奶', 100, 61, 3.5),
 ('D2', '100g 果味酸奶', 100, 95, 3),
 ('D3', '100g 高蛋白酸奶', 100, 65, 9);
+
+--  在type类里增加数据
+update main set type = '米饭' where id in ('M1', 'M2');
+update main set type = '红薯' where id in ('M3', 'M4');
+update protein set type = '鸡肉' where id in ('P1', 'P2');
+update protein set type = '豆腐' where id in ('P3');
+update protein set type = '牛肉' where id in ('P4');
+update vegetable set type = '圆生菜' where id in ('V1', 'V2');
+update vegetable set type = '芥蓝' where id in ('V3');
+update vegetable set type = '西红柿' where id in ('V4');
+update fruit set type = '苹果' where id in ('F1', 'F2');
+update fruit set type = '香蕉' where id in ('F3');
+update fruit set type = '哈密瓜' where id in ('F4');
+update oil set type = '油' where id in ('O1');
+update oil set type = '橄榄油' where id in ('O2');
+update dairy set type = '酸奶' where id in ('D1', 'D2', 'D3');
