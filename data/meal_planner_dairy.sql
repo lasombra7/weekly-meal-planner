@@ -41,7 +41,7 @@ CREATE TABLE `dairy` (
 
 LOCK TABLES `dairy` WRITE;
 /*!40000 ALTER TABLE `dairy` DISABLE KEYS */;
-INSERT INTO `dairy` VALUES ('D1','100g 酸奶','酸奶',100,61,3.5),('D2','100g 果味酸奶','酸奶',100,95,3),('D3','100g 高蛋白酸奶','酸奶',100,65,9);
+INSERT INTO `dairy` VALUES ('D1','100g 酸奶','酸奶',100,61,3.5),('D2','100g 果味酸奶','酸奶',100,95,3),('D3','100g 高蛋白酸奶','酸奶',100,65,9),('D4','250ml 脱脂牛奶','牛奶',250,85,8.5),('D5','30g 马苏里拉芝士','芝士',30,85,6.6),('D6','250ml 无糖豆奶','豆奶',250,90,7);
 /*!40000 ALTER TABLE `dairy` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-18  3:10:49
+-- Dump completed on 2025-10-18 22:19:13
