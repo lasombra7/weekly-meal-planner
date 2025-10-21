@@ -79,7 +79,7 @@ Use Python to connect with the MySQL database and automatically generate weekly 
 
 **Next Steps:**  
 - [x] Connect Python to MySQL  
-- [ ] Randomly select one food per category to form each meal  
+- [x] Randomly select one food per category to form each meal  
 - [ ] Calculate total daily calories and protein  
 - [ ] Generate full 7-day meal plans  
 - [ ] Save results to the `meal_plan` table  
