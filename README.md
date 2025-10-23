@@ -90,6 +90,8 @@ Use Python to connect with the MySQL database and automatically generate weekly 
 - Add calorie and protein tracking by weight  
 - Record user fitness and weight progress  
 - Implement visual charts for calories, protein, and progress trends  
-- Add recipe recommendation system 
+- Add recipe recommendation system
+- Set the oil content as an meal limit
+- Two mode to generate weekly meal plan: user and visitor
 
 
