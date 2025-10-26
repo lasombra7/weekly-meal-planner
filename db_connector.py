@@ -2,22 +2,27 @@ import mysql.connector
 import random
 
 # 连接mysql数据库
-conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="Sha_0715",
-    database="meal_planner",
-    charset="utf8mb4"
-)
-
-cursor = conn.cursor(dictionary=True)
+def connect_db():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="Sha_0715",
+        database="meal_planner",
+        charset="utf8mb4"
+    )
+    return conn
 
 #获取任意表的所有食材
 def get_foods(table_name):
+    conn = connect_db()
+    cursor = conn.cursor(dictionary=True)
     cursor.execute(f"select * from {table_name}")
-    return cursor.fetchall()
+    result =  cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return result
 
-#随机选择出一顿饭
+#随机选择出一顿饭（用于测试）
 def get_random_meal():
     meal = {
         "main": random.choice(get_foods("main")),
@@ -39,9 +44,8 @@ def get_random_meal():
     print(f"\n总热量为： {total_calorie} kcal")
     print(f"\n总蛋白质为: {total_protein} g")
 
-#test：运行一次
-get_random_meal()
+    return meal
 
-#清理资源
-cursor.close()
-conn.close()
+#模块测试入口
+if __name__ == "__main__":
+    get_random_meal()
