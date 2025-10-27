@@ -46,10 +46,10 @@ It’s also a foundation for building a **health-oriented AI assistant** that pl
 
 ## Next Steps
 
-1. Implement database creation script in Python  
-2. Connect MySQL and fetch sample data  
-3. Write a function to assemble daily meals  
-4. Add nutritional analysis & visualization  
+1. Implement generate_daily_meal() for two main meals + optional snack
+2. Add ±10% calorie tolerance and fixed protein range
+3. Generate 7-day plan via generate_weekly_meal_plan() 
+4. Save results into the meal_plan table (optional, may do it latter)
 
 
 ## Project Plan
@@ -80,7 +80,7 @@ Use Python to connect with the MySQL database and automatically generate weekly 
 **Next Steps:**  
 - [x] Connect Python to MySQL  
 - [x] Randomly select one food per category to form each meal  
-- [ ] Calculate total daily calories and protein  
+- [x] Calculate total daily calories and protein  
 - [ ] Generate full 7-day meal plans  
 - [ ] Save results to the `meal_plan` table  
 
