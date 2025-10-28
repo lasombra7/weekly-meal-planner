@@ -64,18 +64,19 @@ It’s also a foundation for building a **health-oriented AI assistant** that pl
 Use Python to connect with the MySQL database and automatically generate weekly meal plans.
 
 **Requirements:**  
-- 7-day meal plan, 2 meals per day (lunch and dinner)  
+- 7-day meal plan, 2 main meals per day (+ optional snack)
 - Daily protein: **130–150 g**  
 - Daily calories: **1800–2000 kcal**  
-- Each meal: around **700 kcal**, not exceeding 850 kcal  
+- Each meal: around **700 kcal**, not exceeding 850 kcal
+- Each main meal: around **700–850 kcal**
 - Optional daily snack: **200–300 kcal**  
-- Weekly total ingredients: **15–20 kinds**
-  - Main: 3–4  
-  - Protein: 3–6  
-  - Vegetable: 4–6  
-  - Fruit: 2–4  
-  - Oil: 1–3  
-  - Dairy: 1–2
+- Weekly total ingredients: **15–20 unique items**
+  - Main: 3–4 types
+  - Protein: 3–6 types
+  - Vegetable: 4–6 types
+  - Fruit: 2–4 types (used in snacks) 
+  - Dairy: 1–2  types (used in snacks)
+  - Oil & Seasoning: reserved for future Recipe Mode expansion
 
 **Next Steps:**  
 - [x] Connect Python to MySQL  
