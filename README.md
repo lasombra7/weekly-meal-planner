@@ -8,7 +8,7 @@ It helps users design healthy and efficient meal schedules, combining Python log
 
 ## Features (Current Phase)
 
-· Generates a 7-day plan (2 meals per day)  
+· Generates a 7-day plan (two main meals + optional snack a day)  
 · Calculates total calories and protein for each day  
 · Follows the 16:8 intermittent fasting schedule  
 · Flexible food database (main, protein, vegetable, fruit, oil, dairy)  
