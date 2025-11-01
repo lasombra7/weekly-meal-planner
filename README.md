@@ -8,7 +8,7 @@ It helps users design healthy and efficient meal schedules, combining Python log
 
 ## Features (Current Phase)
 
-· Generates a 7-day plan (2 meals per day)  
+· Generates a 7-day plan (two main meals + optional snack a day)  
 · Calculates total calories and protein for each day  
 · Follows the 16:8 intermittent fasting schedule  
 · Flexible food database (main, protein, vegetable, fruit, oil, dairy)  
@@ -44,14 +44,6 @@ It’s also a foundation for building a **health-oriented AI assistant** that pl
 
 ---
 
-## Next Steps
-
-1. Implement database creation script in Python  
-2. Connect MySQL and fetch sample data  
-3. Write a function to assemble daily meals  
-4. Add nutritional analysis & visualization  
-
-
 ## Project Plan
 
 ### ~~Phase 1: Database Design~~
@@ -59,39 +51,61 @@ It’s also a foundation for building a **health-oriented AI assistant** that pl
 - ~~Added sample data in `data.sql`~~
 - ~~Supports Chinese input and floating-point nutrition data~~
 
-### <span style="color:red">Phase 2: Python Integration (In Progress)</span>
+### Phase 2: Python Integration (In Progress)
 **Goal:**  
 Use Python to connect with the MySQL database and automatically generate weekly meal plans.
 
 **Requirements:**  
-- 7-day meal plan, 2 meals per day (lunch and dinner)  
+- 7-day meal plan, 2 main meals per day (+ optional snack)
 - Daily protein: **130–150 g**  
-- Daily calories: **1800–2000 kcal**  
-- Each meal: around **700 kcal**, not exceeding 850 kcal  
+- Daily calories: **1500-1800 kcal**  
+- Each main meal: around **700–850 kcal**
 - Optional daily snack: **200–300 kcal**  
-- Weekly total ingredients: **15–20 kinds**
-  - Main: 3–4  
-  - Protein: 3–6  
-  - Vegetable: 4–6  
-  - Fruit: 2–4  
-  - Oil: 1–3  
-  - Dairy: 1–2
+- Weekly total ingredients: **10–15 unique items**
+  - Main: 3–4 types
+  - Protein: 3–6 types
+  - Vegetable: 4–6 types
+  - Fruit: 2–4 types (used in snacks) 
+  - Dairy: 1–2  types (used in snacks)
+  - Oil & Seasoning: reserved for future Recipe Mode expansion
 
 **Next Steps:**  
 - [x] Connect Python to MySQL  
 - [x] Randomly select one food per category to form each meal  
-- [ ] Calculate total daily calories and protein  
+- [x] Calculate total daily calories and protein  
 - [ ] Generate full 7-day meal plans  
 - [ ] Save results to the `meal_plan` table  
 
+### Phase 3: Personalized Meal Planning
+**Goal:**  
+Introduce 2 geberation modes: **User Mode** and **Visitor Mode**
+
+**Features:**
+- Automatically calculate daily energy and nutrient requirements based on user attributes
+- Generate customized 7-day meal plans with calorie and protein constraints
+- Provide flexible input options for both registered users and visitors
+
+**Requirements:** 
+**User Mode**
+- Uses pre-recorded user information stored in the database
+- Includes parameters: username, height, weight, age, exercise frequency
+- Automatically computes daily calorie and protein targets using standard metabolic formulas
+- Users only need to input their username to generate a full weekly meal plan
+- Record previous week plan
+
+**Visitor Mode**
+- Designed for first-time or unregistered users
+- Requires manual input of height, weight, age, and exercise frequency
+- Calculates daily energy needs dynamically based on user input
+- Generates a complete 7-day meal plan following the same logic as User Mode
+
 ---
 
-### Phase 3: Future Development
+### Phase 4: Future Development
 - Add calorie and protein tracking by weight  
 - Record user fitness and weight progress  
 - Implement visual charts for calories, protein, and progress trends  
 - Add recipe recommendation system
 - Set the oil content as an meal limit
-- Two mode to generate weekly meal plan: user and visitor
 
 
