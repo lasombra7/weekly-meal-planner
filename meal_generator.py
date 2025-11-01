@@ -1,9 +1,12 @@
 from db_connector import connect_db, get_foods
 import random
 
-# 生成单个餐食的信息
-def generate_single_meal(conn, calorie_target, protein_target):
-    # 从数据库中随机组合出一顿正餐，这顿饭将由主食，蛋白质，蔬菜,并尽量靠近设定的热量与蛋白质目标。
+# 生成主餐
+def generate_main_meal(conn, calorie_target, protein_target):
+    """
+    从数据库中随机组合出一组正餐，这组正餐将由主食，蛋白质，蔬菜组成,并尽量靠近设定的热量与蛋白质目标。
+    返回包含类型、食材项、总热量和总蛋白质的词典，
+    """
     cursor = conn.cursor(dictionary=True)
 
     # 获取所有的分类数据
@@ -22,7 +25,42 @@ def generate_single_meal(conn, calorie_target, protein_target):
     total_protein = sum(item["protein"] for item in meal.values())
 
     return{
+        "type": "main_meal",
         "meal_items": meal,
-        "total_calorie": total_cal,
-        "total_protein": total_protein
+        "total_calorie": round(total_cal, 1),
+        "total_protein": round(total_protein, 1),
+    }
+
+# 生成每日食谱
+def generate_daily_meal(conn, calorie_range=(1500, 1800), protein_range=(130, 150)):    #calorie_range在此后可能更改
+    """
+    生成一日菜单：
+        - 两顿主餐（main + protein + vegetable）
+        - 若总日热量低于目标的90%，自动添加加餐（fruit + dairy）
+    """
+
+    target_cal = random.randint(*calorie_range)
+    target_protein = random.randint(*protein_range)
+
+    # 设置浮动上下限
+    lower_bound = target_cal + 100
+    upper_bound = target_cal - 100
+
+    # 生成两顿主餐
+    meal_lunch = generate_main_meal(conn)
+    meal_dinner = generate_main_meal(conn)
+
+    total_cal = meal_lunch["total_calorie"] + meal_dinner["total_calorie"]
+    total_protein = meal_dinner["total_protein"] + meal_dinner["total_protein"]
+
+    meals = [meal_lunch, meal_dinner]
+
+    # 根据热量范围决定是否增加snake
+
+    return{
+        "meals": meals,
+        "total_calorie": round(total_cal,1),
+        "total_protein": round(total_protein,1),
+        "target": {"calorie": target_cal, "protein": target_protein},
+        #这里更新完snake后增加
     }
