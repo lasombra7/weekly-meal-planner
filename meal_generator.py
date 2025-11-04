@@ -64,3 +64,14 @@ def generate_daily_meal(conn, calorie_range=(1500, 1800), protein_range=(130, 15
         "target": {"calorie": target_cal, "protein": target_protein},
         #这里更新完snake后增加
     }
+
+# 生成7日计划
+def generate_weekly_meal_plan(conn):
+    """
+    自动生成7天的菜单。
+    """
+    weekly_plan = []
+    for day in range(1,8):
+        daily_plan = generate_daily_meal(conn)
+        weekly_plan.append({"day": day, **daily_plan})
+    return weekly_plan
