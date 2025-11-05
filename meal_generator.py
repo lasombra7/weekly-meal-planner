@@ -31,6 +31,33 @@ def generate_main_meal(conn, calorie_target, protein_target):
         "total_protein": round(total_protein, 1),
     }
 
+# 生成加餐
+def generate_snack(conn):
+    """
+    从数据库中随机组合出一次加餐，加餐由水果和乳制品组成。
+    返回包含类型、食材项、总热量和总蛋白质的词典。
+    """
+    cursor = conn.cursor(dictionary=True)
+
+    # 获取所有的分类数据
+    fruit = random.choice(get_foods("fruit"))
+    dairy = random.choice(get_foods("dairy"))
+
+    snake = {
+        "fruit": fruit,
+        "dairy": dairy
+    }
+
+    total_cal = sum(item["calorie"] for item in snake.values())
+    total_protein = sum(item["protein"] for item in snake.values())
+
+    return {
+        "type": "snake",
+        "item": snake,
+        "total_calorie": round(total_cal, 1),
+        "total_protein": round(total_protein, 1)
+    }
+
 # 生成每日食谱
 def generate_daily_meal(conn, calorie_range=(1500, 1800), protein_range=(130, 150)):    #calorie_range在此后可能更改
     """
