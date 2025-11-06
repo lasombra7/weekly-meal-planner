@@ -43,22 +43,22 @@ def generate_snack(conn):
     fruit = random.choice(get_foods("fruit"))
     dairy = random.choice(get_foods("dairy"))
 
-    snake = {
+    snack = {
         "fruit": fruit,
         "dairy": dairy
     }
 
-    total_cal = sum(item["calorie"] for item in snake.values())
-    total_protein = sum(item["protein"] for item in snake.values())
+    total_cal = sum(item["calorie"] for item in snack.values())
+    total_protein = sum(item["protein"] for item in snack.values())
 
     return {
-        "type": "snake",
-        "item": snake,
+        "type": "snack",
+        "item": snack,
         "total_calorie": round(total_cal, 1),
         "total_protein": round(total_protein, 1)
     }
 
-# 生成每日食谱
+# 生成每日食谱（两餐+可选加餐）
 def generate_daily_meal(conn, calorie_range=(1500, 1800), protein_range=(130, 150)):    #calorie_range在此后可能更改
     """
     生成一日菜单：
@@ -82,14 +82,14 @@ def generate_daily_meal(conn, calorie_range=(1500, 1800), protein_range=(130, 15
 
     meals = [meal_lunch, meal_dinner]
 
-    # 根据热量范围决定是否增加snake
+    # 根据热量范围决定是否增加snack
 
     return{
         "meals": meals,
         "total_calorie": round(total_cal,1),
         "total_protein": round(total_protein,1),
         "target": {"calorie": target_cal, "protein": target_protein},
-        #这里更新完snake后增加
+        #这里更新完snack后增加
     }
 
 # 生成7日计划
