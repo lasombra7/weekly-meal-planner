@@ -79,7 +79,8 @@ def generate_daily_meal(conn, protein_range=(130, 150)):    #calorie_range在此
         total_main_cal = meal_lunch["total_calorie"] + meal_dinner["total_calorie"]
         total_main_protein = meal_lunch["total_protein"] + meal_dinner["total_protein"]
 
-        if total_main_cal >= cal_lower_bound and total_main_protein >= protein_lower_bound:
+        if (cal_lower_bound <= total_main_cal <= cal_upper_bound
+            and protein_lower_bound <= total_main_protein >= protein_upper_bound):
             break
 
     # 生成snack
