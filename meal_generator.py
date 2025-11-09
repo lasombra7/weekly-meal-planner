@@ -1,7 +1,6 @@
 from db_connector import connect_db, get_foods
 import random
 
-calorie_target = 1700
 # 生成主餐
 def generate_main_meal(conn, calorie_target, protein_target):
     """
@@ -60,19 +59,17 @@ def generate_snack(conn):
     }
 
 # 生成每日食谱（两餐+可选加餐）
-def generate_daily_meal(conn, calorie_range=(1600, 1800), protein_range=(130, 150)):    #calorie_range在此后可能更改
+def generate_daily_meal(conn, protein_range=(130, 150)):    #calorie_range在此后可能更改
     """
     生成一日菜单：
         - 两顿主餐（main + protein + vegetable）
         - 若总日热量低于目标的90%，自动添加加餐（fruit + dairy）
     """
 
-    target_cal = random.randint(calorie_target - 100, calorie_target + 100)
-    target_protein = random.randint(*protein_range)
-
-    # 设置浮动上下限
-    lower_bound = target_cal - 100
-    upper_bound = target_cal + 100
+    target_cal = 1700
+    cal_lower_bound = target_cal - 100
+    cal_upper_bound = target_cal + 100
+    protein_lower, protein_upper = protein_range
 
     # 生成两顿主餐
     meal_lunch = generate_main_meal(conn, target_cal / 2, target_protein / 2)
@@ -87,27 +84,37 @@ def generate_daily_meal(conn, calorie_range=(1600, 1800), protein_range=(130, 15
         total_main_cal = meal_lunch["total_calorie"] + meal_dinner["total_calorie"]
         total_main_protein = meal_lunch["total_protein"] + meal_dinner["total_protein"]
 
-    # 根据热量范围决定是否增加加餐
-    snack = generate_snack(conn)
+    # 若主餐低于下限，则自动添加snack
+    snack_included = False
+    snack = None
 
-    # 计算加餐后的总热量和蛋白质
-    total_cal = total_main_cal + snack["total_calorie"]
-    total_protein = total_main_protein + snack["total_protein"]
-
-    # 若总热量超过upper bound 则重新生成加餐
-    while total_cal > upper_bound:
+    if total_main_cal < lower_bound:
         snack = generate_snack(conn)
-        total_cal = total_main_cal + snack["total_calorie"]
-        total_protein = total_main_protein + snack["total_protein"]
+        total_main_cal += snack["total_calorie"]
+        total_main_protein += snack["total_protein"]
+        snack_included = True
 
-    meals = [meal_lunch, meal_dinner,snack]
+        # 若超出上限则重新生成snack
+        while total_main_cal > upper_bound:
+            snack = generate_snack(conn)
+            total_main_cal = (meal_lunch["total_calorie"] +
+                              meal_dinner["total_calorie"] +
+                              snack["total_calorie"])
+            total_main_protein = (meal_lunch["total_protein"] +
+                                  meal_dinner["total_protein"] +
+                                  snack["total_protein"])
+
+    # 整合返回结果
+    meals = [meal_lunch, meal_dinner]
+    if snack_included:
+        meals.append(snack)
 
     return{
         "meals": meals,
-        "total_calorie": round(total_cal,1),
-        "total_protein": round(total_protein,1),
+        "total_calorie": round(total_main_cal, 1),
+        "total_protein": round(total_main_protein, 1),
         "target": {"calorie": target_cal, "protein": target_protein},
-        "snack_included": True
+        "snack_included": snack_included
     }
 
 # 生成7日计划
