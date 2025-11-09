@@ -129,3 +129,14 @@ def generate_weekly_meal_plan(conn):
         daily_plan = generate_daily_meal(conn)
         weekly_plan.append({"day": day, **daily_plan})
     return weekly_plan
+
+#方便测试时候整洁，后期可删除
+if __name__ == "__main__":
+    conn = connect_db()
+    weekly_plan = generate_weekly_meal_plan(conn)
+    for day in weekly_plan:
+        print(
+            f"Day{day['day']} - {day['total_calorie']} kcal / {day['total_protein']} g protein |"
+            f"Snack allowed: {day['snack_allowed']}"
+        )
+conn.close()
