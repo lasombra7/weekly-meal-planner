@@ -53,7 +53,7 @@ def generate_snack(conn):
 
     return {
         "type": "snack",
-        "item": snack,
+        "items": snack,
         "total_calorie": round(total_cal, 1),
         "total_protein": round(total_protein, 1)
     }
@@ -63,58 +63,60 @@ def generate_daily_meal(conn, protein_range=(130, 150)):    #calorie_range在此
     """
     生成一日菜单：
         - 两顿主餐（main + protein + vegetable）
-        - 若总日热量低于目标的90%，自动添加加餐（fruit + dairy）
+        - 若总日热量低于target_cal，自动添加加餐（fruit + dairy）
     """
 
     target_cal = 1700
     cal_lower_bound = target_cal - 100
     cal_upper_bound = target_cal + 100
-    protein_lower, protein_upper = protein_range
+    protein_lower_bound, protein_upper_bound = protein_range
 
     # 生成两顿主餐
-    meal_lunch = generate_main_meal(conn, target_cal / 2, target_protein / 2)
-    meal_dinner = generate_main_meal(conn, target_cal / 2, target_protein / 2)
+    for _ in range(50):
+        meal_lunch = generate_main_meal(conn, target_cal / 2, protein_lower_bound / 2)
+        meal_dinner = generate_main_meal(conn, target_cal / 2, protein_lower_bound / 2)
 
-    total_main_cal = meal_lunch["total_calorie"] + meal_dinner["total_calorie"]
-    total_main_protein = meal_dinner["total_protein"] + meal_dinner["total_protein"]
-
-    # 若主餐总热量小于下限，则重新生成晚餐直到满足条件
-    while total_main_cal < lower_bound:
-        meal_dinner = generate_main_meal(conn, target_cal / 2, target_protein / 2)
         total_main_cal = meal_lunch["total_calorie"] + meal_dinner["total_calorie"]
         total_main_protein = meal_lunch["total_protein"] + meal_dinner["total_protein"]
 
-    # 若主餐低于下限，则自动添加snack
-    snack_included = False
-    snack = None
+        if total_main_cal >= cal_lower_bound and total_main_protein >= protein_lower_bound:
+            break
 
-    if total_main_cal < lower_bound:
-        snack = generate_snack(conn)
-        total_main_cal += snack["total_calorie"]
-        total_main_protein += snack["total_protein"]
-        snack_included = True
+    # 生成snack
+    snack = generate_snack(conn)
+    snack_allowed = False
 
-        # 若超出上限则重新生成snack
-        while total_main_cal > upper_bound:
-            snack = generate_snack(conn)
-            total_main_cal = (meal_lunch["total_calorie"] +
-                              meal_dinner["total_calorie"] +
-                              snack["total_calorie"])
-            total_main_protein = (meal_lunch["total_protein"] +
-                                  meal_dinner["total_protein"] +
-                                  snack["total_protein"])
+    #若主餐热量不足1700，则生成snack
+    if total_main_cal < target_cal:
+        if ((total_main_cal + snack["total_calorie"]) <= cal_upper_bound
+            and (total_main_protein + snack["total_protein"]) <= protein_upper_bound):
+            snack_allowed = True
+
+    # 计算总热量和蛋白质
+    if snack_allowed:
+        total_cal = total_main_cal + snack["total_calorie"]
+        total_protein = total_main_protein + snack["total_protein"]
+    else:
+        total_cal = total_main_cal
+        total_protein = total_main_protein
+
+    #方便测试时候整洁，后期可删除
+    total_cal = round(total_cal, 1)
+    total_protein = round(total_protein, 1)
 
     # 整合返回结果
     meals = [meal_lunch, meal_dinner]
-    if snack_included:
-        meals.append(snack)
-
     return{
         "meals": meals,
-        "total_calorie": round(total_main_cal, 1),
-        "total_protein": round(total_main_protein, 1),
-        "target": {"calorie": target_cal, "protein": target_protein},
-        "snack_included": snack_included
+        "snack_option": snack,
+        "snack_allowed": snack_allowed,
+        "total_calorie": round(total_cal, 1),
+        "total_protein": round(total_protein, 1),
+        "target": {
+            "calorie": target_cal,
+            "protein_lower_bound": protein_lower_bound,
+            "protein_upper_bound": protein_upper_bound
+        }
     }
 
 # 生成7日计划
