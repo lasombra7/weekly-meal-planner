@@ -136,8 +136,23 @@ if __name__ == "__main__":
     conn = connect_db()
     weekly_plan = generate_weekly_meal_plan(conn)
     for day in weekly_plan:
-        print(
-            f"Day{day['day']} - {day['total_calorie']} kcal / {day['total_protein']} g protein |"
-            f"Snack allowed: {day['snack_allowed']}"
-        )
+        print(f"Day{day['day']} - {day['total_calorie']} kcal / {day['total_protein']} g protein |")
+        print(f"Snack allowed: {day['snack_allowed']}")
+        print("-" * 60)
+
+        # 打印每顿主餐详情
+        for meal in day["meals"]:
+            print(f"{meal['type'].title()}:")
+            for category, item in meal["meal_items"].items():
+                print(f"  -  {category.title()}:{item['name']}({item['calorie']} kcal, {item['protein']} g protein)")
+                print(f"  →  Total:{meal['total_calorie']} kcal, {meal['total_protein']} g protein \n")
+
+        # 如果有snack，打印snack详情
+        snack = day["snack_option"]
+        print(f"Snack option({'Allowed' if day['snack_allowed'] else 'Optional only'}):")
+        for category, item in snack["items"].items():
+            print(f"  -  {category.title()}: {item['name']} ({item['calorie']} kcal, {item['protein']} g protein)")
+        print(f"  →  Total:{snack['total_calorie']} kcal, {snack['total_protein']} g protein")
+        print("=" * 60)
+
 conn.close()
