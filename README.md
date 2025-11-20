@@ -53,7 +53,7 @@ It’s also a foundation for building a **health-oriented AI assistant** that pl
 
 ### Phase 2: Python Integration (In Progress)
 **Goal:**  
-Use Python to connect with the MySQL database and automatically generate weekly meal plans.
+Use Python to connect with the MySQL database and automatically generate weekly meal plans (including 2 main meal and a optional snack).
 
 **Requirements:**  
 - 7-day meal plan, 2 main meals per day (+ optional snack)
