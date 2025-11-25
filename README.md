@@ -75,8 +75,7 @@ Use Python to connect with MySQL and generate balanced 7-day meal plans.
 - [x] Calorie & protein balancing algorithm  
 - [x] Optional snack logic  
 - [x] 7-day weekly generator  
-- [x] Console test output showing full food details  
-- [ ] Save final plans into `meal_plan` table  
+- [x] Console test output showing full food details   
 
 ---
 
