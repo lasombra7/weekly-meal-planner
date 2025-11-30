@@ -59,14 +59,15 @@ def generate_snack(conn):
     }
 
 # 生成每日食谱（两餐+可选加餐）
-def generate_daily_meal(conn, protein_range=(130, 150)):    #calorie_range在此后可能更改
+def generate_daily_meal(conn,
+                        target_cal = 1700,
+                        protein_range=(130, 150)):    #calorie_range在此后可能更改
     """
     生成一日菜单：
         - 两顿主餐（main + protein + vegetable）
         - 若总日热量低于target_cal，自动添加加餐（fruit + dairy）
     """
 
-    target_cal = 1700
     cal_lower_bound = target_cal - 100
     cal_upper_bound = target_cal + 100
     protein_lower_bound, protein_upper_bound = protein_range
@@ -121,13 +122,17 @@ def generate_daily_meal(conn, protein_range=(130, 150)):    #calorie_range在此
     }
 
 # 生成7日计划
-def generate_weekly_meal_plan(conn):
+def generate_weekly_meal_plan(conn,
+                              target_cal=1700,
+                              protein_range=(130,150)):
     """
     自动生成7天的菜单。
     """
     weekly_plan = []
     for day in range(1,8):
-        daily_plan = generate_daily_meal(conn)
+        daily_plan = generate_daily_meal(conn,
+                                         target_cal=target_cal,
+                                         protein_range=protein_range)
         weekly_plan.append({"day": day, **daily_plan})
     return weekly_plan
 
