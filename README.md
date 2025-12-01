@@ -79,7 +79,7 @@ Use Python to connect with MySQL and generate balanced 7-day meal plans.
 
 ---
 
-### Phase 3: Personalized Meal Planning (Upcoming)
+### Phase 3: Personalized Meal Planning (Process)
 
 **Goal:**  
 Introduce two modes — **User Mode** and **Visitor Mode** — to generate personalized 7-day plans.
