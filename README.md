@@ -136,3 +136,46 @@ Make meal plan generation **transparent, interpretable, and measurable**.
 
 ---
 
+### Phase 6: Feedback Loop, Reproducibility & System Polish *(Planned)*
+
+**Goal:**  
+Evolve the project into a **reproducible experimental system** suitable for research and long-term extension.
+
+**Planned Features**
+- Add user weight log table (`user_log`)
+  - Track weekly weight changes  
+  - Adjust calorie targets using simple feedback rules  
+- Ensure reproducible meal generation:
+  - Support fixed random seeds  
+  - Centralized configuration file for parameters  
+- Modularize project structure:
+  - Separate database access, planning logic, strategies, and evaluation  
+- Improve usability and reproducibility:
+  - `requirements.txt`  
+  - `.env.example`  
+  - Database initialization scripts  
+
+---
+
+## Long-Term Vision
+
+This project serves as a foundation for future work in:
+
+- Constraint-based optimization  
+- Personalized recommendation systems  
+- Explainable planning algorithms  
+- Data-driven health and fitness applications  
+
+---
+
+## Summary
+
+This project is not just a meal generator.  
+It is a **data-driven, constraint-based, and extensible planning framework** that integrates:
+
+- Structured SQL databases  
+- Rule-based and strategy-based generation logic  
+- User modeling and personalization  
+- Explainability, evaluation, and reproducibility  
+
+The system is designed to grow into a research-oriented platform suitable for graduate-level study and experimentation.
