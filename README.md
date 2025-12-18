@@ -99,3 +99,40 @@ Extend the generator into a **multi-strategy planning framework** that adapts to
 
 ---
 
+### Phase 4: User Modeling & Personalization *(Planned)*
+
+**Goal:**  
+Move from static targets to **user-centered personalized meal planning**.
+
+**Planned Features**
+- Add `user_profile` table:
+  - user_id, height, weight, age, sex, activity_level, goal  
+- Support two operating modes:
+  - **User Mode:** load saved user profiles  
+  - **Visitor Mode:** temporary input without persistence  
+- Integrate a target calculation module:
+  - Compute calorie & protein targets from user attributes  
+  - Adjust targets based on selected goal  
+- Store generated meal plans linked to user_id and date  
+
+---
+
+### Phase 5: Explainable Planning & Evaluation *(Planned)*
+
+**Goal:**  
+Make meal plan generation **transparent, interpretable, and measurable**.
+
+**Planned Features**
+- Explainable decision logs for each generated day:
+  - Why a specific food or protein source was selected  
+  - Why a snack was added or omitted  
+  - Which constraint influenced the decision  
+- Structured explanation output (console and optional database storage)  
+- Introduce evaluation metrics:
+  - Daily calorie deviation from target  
+  - Daily protein deviation from target  
+  - Snack usage frequency  
+  - Ingredient repetition rate  
+
+---
+
