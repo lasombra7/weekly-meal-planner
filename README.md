@@ -13,7 +13,7 @@ This project integrates structured nutrition data with Python algorithms to prod
 - Automatically determines whether a snack can be added  
 - Flexible food database (main, protein, vegetable, fruit, oil, dairy)  
 - Includes console test view showing detailed food selections  
-- Ready to expand toward nutrition tracking and user personalization
+- Ready to expand toward nutrition tracking and user personalization  
 
 ---
 
@@ -26,7 +26,7 @@ This project integrates structured nutrition data with Python algorithms to prod
 ### Database Tables
 
 | Table | Description | Columns |
-|--------|--------------|----------|
+|------|------------|---------|
 | `main` | Staple foods | id, name, type, weight, calorie, protein |
 | `protein` | Protein sources | id, name, type, weight, calorie, protein |
 | `vegetable` | Vegetables | id, name, type, weight, calorie, protein |
@@ -41,66 +41,61 @@ This project integrates structured nutrition data with Python algorithms to prod
 ## Project Goal
 
 This project is a practical experiment combining **data modeling**, **SQL**, and **Python generation logic**.  
-It is also the foundation for a future **AI-powered personalized meal planning assistant**.
+It is also the foundation for a future **research-oriented, personalized, and explainable meal planning system**.
 
 ---
 
-## Project Plan
+## Project Roadmap
 
-### ~~Phase 1: Database Design~~
-- ~~Built 8 structured nutrition tables~~  
-- ~~Added sample data with Chinese input support~~  
-- ~~Exported schema + data via MySQL Workbench~~
+### Phase 1: Database Design ✅ *(Completed)*
+
+- Built 8 normalized nutrition tables  
+- Designed structured schemas for food categories  
+- Added sample data with UTF-8 (Chinese) support  
+- Exported schema and seed data via MySQL Workbench  
 
 ---
 
-### Phase 2: Python Integration (**Completed** ✓)
+### Phase 2: Python Integration & Constraint-Based Planning ✅ *(Completed)*
 
 **Goal:**  
-Use Python to connect with MySQL and generate balanced 7-day meal plans.
+Use Python to connect with MySQL and generate balanced 7-day meal plans under strict nutritional constraints.
 
 **Implemented Logic:**
-- Two main meals must meet:
-  - **Calorie lower bound:** ≥ 1600 kcal  
-  - **Calorie upper bound:** ≤ 1800 kcal  
-  - **Protein lower bound:** ≥ 130 g  
-  - **Protein upper bound:** ≤ 150 g  
-- A snack is **optional but evaluated daily**:
-  - Only allowed if main meals < 1700 kcal  
-  - Must not push totals > 1800 kcal (calories) or > 150 g (protein)
+- Two main meals must satisfy:
+  - **Calorie range:** 1600–1800 kcal  
+  - **Protein range:** 130–150 g  
+- Snack is optional and evaluated daily:
+  - Only added if main meals < 1700 kcal  
+  - Must not exceed daily upper bounds  
 
 **Completed Tasks**
 - [x] MySQL → Python integration  
-- [x] Random meal composition (main/protein/vegetable)  
-- [x] Calorie & protein balancing algorithm  
-- [x] Optional snack logic  
-- [x] 7-day weekly generator  
-- [x] Console test output showing full food details   
+- [x] Randomized meal composition (main / protein / vegetable)  
+- [x] Calorie & protein constraint validation  
+- [x] Optional snack decision logic  
+- [x] 7-day weekly meal plan generator  
+- [x] Console output with full food-level details  
 
 ---
 
-### Phase 3: Personalized Meal Planning (Process)
+### Phase 3: Strategy Framework & Goal-Based Planning *(Planned)*
 
 **Goal:**  
-Introduce two modes — **User Mode** and **Visitor Mode** — to generate personalized 7-day plans.
+Extend the generator into a **multi-strategy planning framework** that adapts to different nutrition goals.
 
-#### User Mode
-- Uses saved user data (username, height, weight, age, activity level)  
-- Automatically computes calorie & protein needs  
-- Generates weekly plan based on personalized ranges  
-- Stores user history and last week's plan  
-
-#### Visitor Mode
-- For new users without accounts  
-- Requires manual input of height, weight, age, and activity level  
-- Auto-computes nutrition targets and generates a full weekly plan  
+**Planned Features**
+- Support multiple user goals:
+  - Maintain weight  
+  - Fat loss  
+  - Muscle gain  
+  - Recomposition (fat loss + muscle retention)  
+- Automatically convert goals into personalized calorie & protein ranges  
+- Implement multiple generation strategies:
+  - **Random Strategy** (baseline)  
+  - **Greedy Strategy** (prioritize protein satisfaction)  
+  - **Weighted Strategy** (optimize overall meal quality)  
+- Allow strategy selection via configuration or command-line options  
 
 ---
 
-### Phase 4: Future Development
-
-- Add calorie & protein tracking based on actual weight  
-- Record fitness and weight progress  
-- Visual charts for weekly/monthly nutrition  
-- Recipe recommendation system  
-- Add oil & seasoning logic into meals  
