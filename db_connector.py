@@ -46,6 +46,29 @@ def get_random_meal():
 
     return meal
 
+# 从user_profile 表中读取用户数据
+def load_user_profile(user_id):
+    user1 = {
+        "height_cm": 165,
+        "weight_kg": 76.00,
+        "age": 25,
+        "sex": "female",
+        "activity_level": "moderate",
+        "goal": "lose"
+    }
+
+def test_user_profile_connection():
+    conn = connect_db()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM user_profile LIMIT 1")
+    user = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    print(user)
+
 #模块测试入口
 if __name__ == "__main__":
     get_random_meal()
