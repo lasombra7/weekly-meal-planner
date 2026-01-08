@@ -1,3 +1,8 @@
+-- =================================
+-- Table: user profile
+-- Description: User physical profile and dietary goal settings
+-- =================================
+USE meal_planner;
 CREATE TABLE IF NOT EXISTS user_profile (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     height_cm INT NOT NULL,

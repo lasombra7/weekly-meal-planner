@@ -1,57 +1,34 @@
-CREATE DATABASE  IF NOT EXISTS `meal_planner` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `meal_planner`;
--- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
---
--- Host: 127.0.0.1    Database: meal_planner
--- ------------------------------------------------------
--- Server version	8.0.43
+-- =================================
+-- Table: oil
+-- Description: Oil products
+-- =================================
+USE meal_planner;
+CREATE TABLE IF NOT EXISTS oil (
+  id CHAR(5),
+  name VARCHAR(50),
+  type VARCHAR(20),
+  weight INT COMMENT 'Unit: g',
+  calorie INT COMMENT 'Unit: kcal',
+  protein FLOAT COMMENT 'Unit: g',
+  PRIMARY KEY (id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `oil`
---
-
-DROP TABLE IF EXISTS `oil`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `oil` (
-  `id` char(5) COLLATE utf8mb4_general_ci NOT NULL,
-  `name` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `type` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `weight` int DEFAULT NULL COMMENT '单位：g',
-  `calorie` int DEFAULT NULL COMMENT '单位：kcal',
-  `protein` float DEFAULT NULL COMMENT '单位：g',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `oil`
---
-
-LOCK TABLES `oil` WRITE;
-/*!40000 ALTER TABLE `oil` DISABLE KEYS */;
-INSERT INTO `oil` VALUES ('O1','一勺食用油','油',10,90,0),('O2','一勺橄榄油','橄榄油',10,90,0);
-/*!40000 ALTER TABLE `oil` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2025-10-18 22:19:13
+INSERT INTO
+  oil (id, name, type, weight, calorie, protein)
+VALUES
+  (
+    'O1',
+    'Cooking Oil (1 tbsp)',
+    'Cooking Oil',
+    10,
+    90,
+    0.0
+  ),
+  (
+    'O2',
+    'Olive Oil (1 tbsp)',
+    'Olive Oil',
+    10,
+    90,
+    0.0
+  );
