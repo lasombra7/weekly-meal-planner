@@ -1,18 +1,25 @@
 from db_connector import connect_db, get_foods
+from strategies.random_strategy import RandomStrategy
 import random
 
 # 生成主餐
-def generate_main_meal(conn, calorie_target, protein_target):
+def generate_main_meal(conn, calorie_target, protein_target, strategy=None):
     """
     从数据库中随机组合出一组正餐，这组正餐将由主食，蛋白质，蔬菜组成,并尽量靠近设定的热量与蛋白质目标。
     返回包含类型、食材项、总热量和总蛋白质的词典，
     """
-    cursor = conn.cursor(dictionary=True)
+    if strategy is None:
+        strategy = RandomStrategy()
 
     # 获取所有的分类数据
-    main = random.choice(get_foods("main"))
-    protein = random.choice(get_foods("protein"))
-    vegetable = random.choice(get_foods("vegetable"))
+    mains = get_foods("main")
+    proteins = get_foods("protein")
+    vegetables = get_foods("vegetable")
+
+    # 由策略决定如何选择食材
+    main = strategy.pick_main(mains)
+    protein = strategy.pick_protein(proteins)
+    vegetable = strategy.pick_vegetable(vegetables)
 
     meal = {
         "main": main,
