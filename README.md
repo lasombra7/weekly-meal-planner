@@ -79,23 +79,36 @@ Use Python to connect with MySQL and generate balanced 7-day meal plans under st
 
 ---
 
-### Phase 3: Strategy Framework & Goal-Based Planning *(Planned)*
+### Phase 3: Strategy Framework & Goal-Based Planning *(In Progress)*
 
 **Goal:**  
-Extend the generator into a **multi-strategy planning framework** that adapts to different nutrition goals.
+Extend the generator into a **multi-strategy planning framework** that adapts to different nutrition goals while keeping the generation flow modular and extensible.
 
-**Planned Features**
+**Design Focus:**
+- Decouple *food selection logic* from *meal generation flow*
+- Enable strategy-based experimentation without changing core constraints
+- Prepare the system for explainability and personalization in later phases
+
+**Completed Tasks**
+- [x] Introduced a **Strategy abstraction layer** for main meal selection  
+- [x] Defined a unified `MealStrategy` interface (`pick_main / pick_protein / pick_vegetable`)  
+- [x] Implemented **RandomStrategy** as a baseline strategy  
+- [x] Refactored `generate_main_meal()` to be **strategy-driven**  
+- [x] Preserved Phase 2 behavior while upgrading system architecture  
+- [x] Ensured strategy injection via function parameters (default fallback supported)
+
+**In Progress**
+- [ ] Implement **Greedy Strategy** (protein-priority selection)  
+- [ ] Implement **Weighted Strategy** (quality-aware probabilistic selection)  
+- [ ] Expose strategy selection via configuration or CLI options  
+
+**Planned Extensions**
 - Support multiple user goals:
   - Maintain weight  
   - Fat loss  
   - Muscle gain  
   - Recomposition (fat loss + muscle retention)  
 - Automatically convert goals into personalized calorie & protein ranges  
-- Implement multiple generation strategies:
-  - **Random Strategy** (baseline)  
-  - **Greedy Strategy** (prioritize protein satisfaction)  
-  - **Weighted Strategy** (optimize overall meal quality)  
-- Allow strategy selection via configuration or command-line options  
 
 ---
 
