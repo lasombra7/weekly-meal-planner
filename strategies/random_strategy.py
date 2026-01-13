@@ -1,6 +1,7 @@
 import random
 from .base import MealStrategy
 
+
 class RandomStrategy(MealStrategy):
     """
     随机策略Random Strategy（baseline）：

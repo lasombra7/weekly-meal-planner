@@ -1,6 +1,8 @@
 from db_connector import connect_db, get_foods
 from strategies.random_strategy import RandomStrategy
+from strategies.greedy_strategy import GreedyStrategy
 import random
+
 
 # 生成主餐
 def generate_main_meal(conn, calorie_target, protein_target, strategy=None):
@@ -146,9 +148,10 @@ def generate_weekly_meal_plan(conn,
 #方便测试时候整洁，后期可删除
 if __name__ == "__main__":
     conn = connect_db()
+    # ===== 原 Weekly 逻辑 =====
     weekly_plan = generate_weekly_meal_plan(conn)
     for day in weekly_plan:
-        print(f"Day{day['day']} - {day['total_calorie']} kcal / {day['total_protein']} g protein |")
+        print(f"Day {day['day']} - {day['total_calorie']} kcal / {day['total_protein']} g protein |")
         print(f"Snack allowed: {day['snack_allowed']}")
         print("-" * 60)
 
@@ -167,4 +170,22 @@ if __name__ == "__main__":
         print(f"  →  Total:{snack['total_calorie']} kcal, {snack['total_protein']} g protein")
         print("=" * 60)
 
-conn.close()
+    # ===== 现测试Greedy Strategy =====
+    print("\n=== Greedy Strategy Test ===")
+    meal = generate_main_meal(
+        conn,
+        calorie_target=850,
+        protein_target=70,
+        strategy=GreedyStrategy()
+    )
+
+    for category, item in meal["meal_items"].items():
+        print(
+            f"{category}: {item['name']} "
+            f"({item['calorie']} kcal, {item['protein']} g protein)"
+        )
+    print(
+        f"Total:{meal['total_calorie']} kcal,"
+        f"{meal['total_protein']} g protein"
+    )
+    conn.close()

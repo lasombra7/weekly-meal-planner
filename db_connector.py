@@ -1,6 +1,7 @@
 import mysql.connector
 import random
 
+
 # 连接mysql数据库
 def connect_db():
     conn = mysql.connector.connect(
