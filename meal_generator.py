@@ -1,7 +1,5 @@
 from db_connector import connect_db, get_foods
-from strategies.random_strategy import RandomStrategy
-from strategies.greedy_strategy import GreedyStrategy
-from strategies.weighted_strategy import WeightedStrategy
+from strategies.registry import get_strategy
 import random
 
 
@@ -12,7 +10,7 @@ def generate_main_meal(conn, calorie_target, protein_target, strategy=None):
     返回包含类型、食材项、总热量和总蛋白质的词典，
     """
     if strategy is None:
-        strategy = RandomStrategy()
+        strategy = get_strategy("random")
 
     # 获取所有的分类数据
     mains = get_foods("main")
@@ -91,7 +89,7 @@ def generate_daily_meal(conn,
         total_main_protein = meal_lunch["total_protein"] + meal_dinner["total_protein"]
 
         if (cal_lower_bound <= total_main_cal <= cal_upper_bound
-            and protein_lower_bound <= total_main_protein >= protein_upper_bound):
+            and protein_lower_bound <= total_main_protein <= protein_upper_bound):
             break
 
     # 生成snack
@@ -150,6 +148,7 @@ def generate_weekly_meal_plan(conn,
 if __name__ == "__main__":
     conn = connect_db()
     # ===== 原 Weekly 逻辑 =====
+    print("=== Weekly Plan (Default: Random Strategy) ===")
     weekly_plan = generate_weekly_meal_plan(conn)
     for day in weekly_plan:
         print(f"Day {day['day']} - {day['total_calorie']} kcal / {day['total_protein']} g protein |")
@@ -160,8 +159,8 @@ if __name__ == "__main__":
         for meal in day["meals"]:
             print(f"{meal['type'].title()}:")
             for category, item in meal["meal_items"].items():
-                print(f"  -  {category.title()}:{item['name']}({item['calorie']} kcal, {item['protein']} g protein)")
-                print(f"  →  Total:{meal['total_calorie']} kcal, {meal['total_protein']} g protein \n")
+                print(f"  -  {category.title()}:{item['name']} ({item['calorie']} kcal, {item['protein']} g protein)")
+            print(f"  →  Total:{meal['total_calorie']} kcal, {meal['total_protein']} g protein \n")
 
         # 如果有snack，打印snack详情
         snack = day["snack_option"]
@@ -177,36 +176,24 @@ if __name__ == "__main__":
         conn,
         calorie_target=850,
         protein_target=70,
-        strategy=GreedyStrategy()
+        strategy=get_strategy("greedy")
     )
 
     for category, item in meal["meal_items"].items():
-        print(
-            f"{category}: {item['name']} "
-            f"({item['calorie']} kcal, {item['protein']} g protein)"
-        )
-    print(
-        f"Total:{meal['total_calorie']} kcal,"
-        f"{meal['total_protein']} g protein"
-    )
+        print(f"  -  {category.title()}: {item['name']} ({item['calorie']} kcal, {item['protein']} g protein)")
+    print(f"  →  Total:{meal['total_calorie']} kcal, {meal['total_protein']} g protein \n")
 
     # ===== 现测试Weighted Strategy =====
-    print("\n=== Weighted Strategy Test ===")
+    print("=== Weighted Strategy Test ===")
     meal = generate_main_meal(
         conn,
         calorie_target=850,
         protein_target=70,
-        strategy=WeightedStrategy()
+        strategy=get_strategy("weighted")
     )
 
     for category, item in meal["meal_items"].items():
-        print(
-            f"{category}: {item['name']}"
-            f"({item['calorie']} kcal, {item['protein']} g protein)"
-        )
-    print(
-        f"Total:{meal['total_calorie']} kcal,"
-        f"{meal['total_protein']} g protein"
-    )
+        print(f"  -  {category.title()}: {item['name']} ({item['calorie']} kcal, {item['protein']} g protein)")
+    print(f"  →  Total:{meal['total_calorie']} kcal, {meal['total_protein']} g protein \n")
 
     conn.close()
