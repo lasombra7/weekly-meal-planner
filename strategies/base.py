@@ -7,7 +7,9 @@ class MealStrategy:
 
     def pick_main(self, mains, context=None):
         raise NotImplementedError
+
     def pick_protein(self, proteins, context=None):
         raise NotImplementedError
+
     def pick_vegetable(self, vegetables, context=None):
         raise  NotImplementedError

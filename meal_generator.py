@@ -1,6 +1,7 @@
 from db_connector import connect_db, get_foods
 from strategies.random_strategy import RandomStrategy
 from strategies.greedy_strategy import GreedyStrategy
+from strategies.weighted_strategy import WeightedStrategy
 import random
 
 
@@ -188,4 +189,24 @@ if __name__ == "__main__":
         f"Total:{meal['total_calorie']} kcal,"
         f"{meal['total_protein']} g protein"
     )
+
+    # ===== 现测试Weighted Strategy =====
+    print("\n=== Weighted Strategy Test ===")
+    meal = generate_main_meal(
+        conn,
+        calorie_target=850,
+        protein_target=70,
+        strategy=WeightedStrategy()
+    )
+
+    for category, item in meal["meal_items"].items():
+        print(
+            f"{category}: {item['name']}"
+            f"({item['calorie']} kcal, {item['protein']} g protein)"
+        )
+    print(
+        f"Total:{meal['total_calorie']} kcal,"
+        f"{meal['total_protein']} g protein"
+    )
+
     conn.close()

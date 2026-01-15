@@ -35,6 +35,7 @@ class GreedyStrategy(MealStrategy):
     def pick_main(self, mains, context=None):
         # 主食暂时不贪心
         return random.choice(mains)
+
     def pick_vegetable(self, vegetables, context=None):
         # 蔬菜暂时不贪心
         return  random.choice(vegetables)
