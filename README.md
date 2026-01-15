@@ -79,7 +79,7 @@ Use Python to connect with MySQL and generate balanced 7-day meal plans under st
 
 ---
 
-### Phase 3: Strategy Framework & Goal-Based Planning *(In Progress)*
+### Phase 3: Strategy Framework & Goal-Based Planning ✅ *(Completed)*
 
 **Goal:**  
 Extend the generator into a **multi-strategy planning framework** that adapts to different nutrition goals while keeping the generation flow modular and extensible.
@@ -96,13 +96,13 @@ Extend the generator into a **multi-strategy planning framework** that adapts to
 - [x] Refactored `generate_main_meal()` to be **strategy-driven**  
 - [x] Preserved Phase 2 behavior while upgrading system architecture  
 - [x] Ensured strategy injection via function parameters (default fallback supported)
-- [x] Implement **Greedy Strategy** (protein-priority selection)  
+- [x] Implemented **Greedy Strategy** (protein-priority selection)
+- [x] Implemented **Weighted Strategy** (quality-aware probabilistic selection)
+- [x] Expose strategy selection via centralized registry (configuration-ready)
 
-**In Progress**
-- [ ] Implement **Weighted Strategy** (quality-aware probabilistic selection)  
-- [ ] Expose strategy selection via configuration or CLI options  
 
 **Planned Extensions**
+These extensions build directly on the completed strategy framework.
 - Support multiple user goals:
   - Maintain weight  
   - Fat loss  
