@@ -96,9 +96,9 @@ Extend the generator into a **multi-strategy planning framework** that adapts to
 - [x] Refactored `generate_main_meal()` to be **strategy-driven**  
 - [x] Preserved Phase 2 behavior while upgrading system architecture  
 - [x] Ensured strategy injection via function parameters (default fallback supported)
+- [x] Implement **Greedy Strategy** (protein-priority selection)  
 
 **In Progress**
-- [ ] Implement **Greedy Strategy** (protein-priority selection)  
 - [ ] Implement **Weighted Strategy** (quality-aware probabilistic selection)  
 - [ ] Expose strategy selection via configuration or CLI options  
 
