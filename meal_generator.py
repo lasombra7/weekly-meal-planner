@@ -6,8 +6,8 @@ import random
 # 生成主餐
 def generate_main_meal(conn, calorie_target, protein_target, strategy=None):
     """
-    从数据库中随机组合出一组正餐，这组正餐将由主食，蛋白质，蔬菜组成,并尽量靠近设定的热量与蛋白质目标。
-    返回包含类型、食材项、总热量和总蛋白质的词典，
+    从数据库中随机组合出一组正餐，这组正餐将由main, protein, vegetable组成,并尽量靠近设定的热量与蛋白质目标。
+    返回包含type, meal_item, total_calorie, total_protein的词典
     """
     if strategy is None:
         strategy = get_strategy("random")
@@ -42,8 +42,8 @@ def generate_main_meal(conn, calorie_target, protein_target, strategy=None):
 # 生成加餐
 def generate_snack(conn):
     """
-    从数据库中随机组合出一次加餐，加餐由水果和乳制品组成。
-    返回包含类型、食材项、总热量和总蛋白质的词典。
+    从数据库中随机组合出一次snack，snack由fruit和dairy组成。
+    返回包含type, items, total_calorie, total_protein的词典。
     """
     cursor = conn.cursor(dictionary=True)
 
@@ -73,7 +73,7 @@ def generate_daily_meal(conn,
     """
     生成一日菜单：
         - 两顿主餐（main + protein + vegetable）
-        - 若总日热量低于target_cal，自动添加加餐（fruit + dairy）
+        - 若总日热量低于target_cal，自动添加snack（fruit + dairy）
     """
 
     cal_lower_bound = target_cal - 100
