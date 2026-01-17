@@ -100,19 +100,9 @@ Extend the generator into a **multi-strategy planning framework** that adapts to
 - [x] Implemented **Weighted Strategy** (quality-aware probabilistic selection)
 - [x] Expose strategy selection via centralized registry (configuration-ready)
 
-
-**Planned Extensions**
-These extensions build directly on the completed strategy framework.
-- Support multiple user goals:
-  - Maintain weight  
-  - Fat loss  
-  - Muscle gain  
-  - Recomposition (fat loss + muscle retention)  
-- Automatically convert goals into personalized calorie & protein ranges  
-
 ---
 
-### Phase 4: User Modeling & Personalization *(Planned)*
+### Phase 4: User Modeling & Personalization *(In Progress)*
 
 **Goal:**  
 Move from static targets to **user-centered personalized meal planning**.
@@ -126,7 +116,24 @@ Move from static targets to **user-centered personalized meal planning**.
 - Integrate a target calculation module:
   - Compute calorie & protein targets from user attributes  
   - Adjust targets based on selected goal  
-- Store generated meal plans linked to user_id and date  
+- Store generated meal plans linked to user_id and date
+
+**Completed Tasks**
+- [x] Introduced a user-driven planning entry point decoupled from meal generation logic
+- [x] Supported two operating modes:
+      - User Mode: load persistent user profiles (interface prepared)
+      - Visitor Mode: temporary user input without persistence  
+- [x] Integrated a target calculation module to derive calorie and protein targets from user attributes  
+- [x] Enabled goal-aware target generation via calculator logic (maintenance / fat loss / gain)
+- [x] Fully decoupled user modeling, target computation, and meal planning flow
+
+**Incompleted Tasks**
+- [ ] Implement persistent user_profile table in database (user_id, height, weight, age, sex, activity_level, goal)
+- [ ] Replace stubbed user loading logic with database-backed DAO layer
+- [ ] Support multi-user scenarios and profile switching
+- [ ] Store generated meal plans linked to user_id and date
+- [ ] Enable strategy selection to be driven by user preferences
+- [ ] Prepare user-linked data for explainability and evaluation phases
 
 ---
 
