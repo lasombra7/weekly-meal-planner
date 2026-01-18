@@ -13,3 +13,10 @@ CREATE TABLE IF NOT EXISTS user_profile (
     goal ENUM('maintain', 'lose', 'gain') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+INSERT INTO 
+  user_profile (height_cm, weight_kg, age, sex, activity_level,goal)
+VALUES
+(170, 76.0, 25, 'female', 'moderate', 'lose'),
+(160, 45.0, 22, 'male', 'light', 'gain'),
+(180, 80.0, 30, 'male', 'high', 'maintain');

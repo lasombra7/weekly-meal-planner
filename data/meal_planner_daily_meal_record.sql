@@ -3,7 +3,7 @@
 -- Description: Generated daily meal plans with selected food items and nutrition summary
 -- ==========================================================================================
 USE meal_planner;
-CREATE TABLE IF NOT EXISTS meal_plan (
+CREATE TABLE IF NOT EXISTS daily_meal_record (
   id INT AUTO_INCREMENT,
   date DATE,
   meal_type ENUM('Lunch', 'Dinner'),

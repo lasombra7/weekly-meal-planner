@@ -47,16 +47,23 @@ def get_random_meal():
 
     return meal
 
-# 从user_profile 表中读取用户数据
+# 从 user_profile 表中加载用户信息
 def load_user_profile(user_id):
-    user1 = {
-        "height_cm": 165,
-        "weight_kg": 76.00,
-        "age": 25,
-        "sex": "female",
-        "activity_level": "moderate",
-        "goal": "lose"
-    }
+    conn = connect_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(
+        "SELECT * FROM user_profile WHERE user_id = %s",
+        (user_id,)
+    )
+    profile = cursor.fetchone()
+    cursor.close()
+    conn.close()
+
+    if profile is None:
+        raise ValueError(f"user_profile not found for user_id={user_id}")
+
+    return profile
+
 
 #模块测试入口
 if __name__ == "__main__":

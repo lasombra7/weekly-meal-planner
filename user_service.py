@@ -11,8 +11,8 @@ def generate_weekly_plan_for_user(
 ):
     """
     支持两种模式：
-    - User Mode: 通过 user_id 加载已保存的用户信息
-    - Visitor Mode: 使用临时传入的visitor_profile
+        - User Mode: 通过 user_id 加载已保存的用户信息
+        - Visitor Mode: 使用临时传入的visitor_profile
     返回包含mode, user_profile, targets, strategy_name, weekly_plan的词典
     """
 

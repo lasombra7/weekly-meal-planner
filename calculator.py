@@ -2,6 +2,11 @@ def calculate_targets(height_cm, weight_kg, age, sex="female", activity_level="m
     """
     根据基础信息计算每日target_cal和protein范围。
     """
+    # 统一数据类型
+    height_cm = float(height_cm)
+    weight_kg = float(weight_kg)
+    age = int(age)
+
     # Mifflin–St Jeor BMR formula
     if sex == "female":  # 女性
         bmr = 10 * weight_kg + 6.25 * height_cm - 5 * age - 161

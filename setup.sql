@@ -12,6 +12,9 @@ SOURCE D:/0 Learning/GitHub/weekly-meal-planner/data/meal_planner_dairy.sql;
 SOURCE D:/0 Learning/GitHub/weekly-meal-planner/data/meal_planner_oil.sql;
 SOURCE D:/0 Learning/GitHub/weekly-meal-planner/data/meal_planner_seasoning.sql;
 
--- System / runtime tables
-SOURCE D:/0 Learning/GitHub/weekly-meal-planner/data/meal_planner_meal_plan.sql;
+-- User state / persistence tables
+SOURCE D:/0 Learning/GitHub/weekly-meal-planner/data/meal_planner_user_weekly_plan.sql;
 SOURCE D:/0 Learning/GitHub/weekly-meal-planner/data/meal_planner_user_profile.sql;
+
+-- Execution / recoed tables
+SOURCE D:/0 Learning/GitHub/weekly-meal-planner/data/meal_planner_daily_meal_record.sql;
