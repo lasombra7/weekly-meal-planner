@@ -126,11 +126,12 @@ Move from static targets to **user-centered personalized meal planning**.
 - [x] Integrated a target calculation module to derive calorie and protein targets from user attributes  
 - [x] Enabled goal-aware target generation via calculator logic (maintenance / fat loss / gain)
 - [x] Fully decoupled user modeling, target computation, and meal planning flow
+- [x] Implement persistent user_profile table in database (user_id, height, weight, age, sex, activity_level, goal)
+- [x] Replace stubbed user loading logic with database-backed DAO layer
+- [x] Support multi-user scenarios and profile switching
 
 **Incompleted Tasks**
-- [ ] Implement persistent user_profile table in database (user_id, height, weight, age, sex, activity_level, goal)
-- [ ] Replace stubbed user loading logic with database-backed DAO layer
-- [ ] Support multi-user scenarios and profile switching
+
 - [ ] Store generated meal plans linked to user_id and date
 - [ ] Enable strategy selection to be driven by user preferences
 - [ ] Prepare user-linked data for explainability and evaluation phases
