@@ -102,7 +102,7 @@ Extend the generator into a **multi-strategy planning framework** that adapts to
 
 ---
 
-### Phase 4: User Modeling & Personalization *(In Progress)*
+### Phase 4: User Modeling & Personalization ✅ *(Completed)*
 
 **Goal:**  
 Move from static targets to **user-centered personalized meal planning**.
@@ -129,12 +129,10 @@ Move from static targets to **user-centered personalized meal planning**.
 - [x] Implement persistent user_profile table in database (user_id, height, weight, age, sex, activity_level, goal)
 - [x] Replace stubbed user loading logic with database-backed DAO layer
 - [x] Support multi-user scenarios and profile switching
+- [x] Store generated meal plans linked to user_id and date
+- [x] Enable strategy selection to be driven by user preferences
+- [x] Prepare user-linked data for explainability and evaluation phases
 
-**Incompleted Tasks**
-
-- [ ] Store generated meal plans linked to user_id and date
-- [ ] Enable strategy selection to be driven by user preferences
-- [ ] Prepare user-linked data for explainability and evaluation phases
 
 ---
 
