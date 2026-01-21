@@ -1,8 +1,10 @@
+USE meal_planner;
+
 -- =================================
 -- Table: user profile
--- Description: User physical profile and dietary goal settings
+-- Description: Useuser_weekly_planuser_weekly_planr physical profile and dietary goal settings
 -- =================================
-USE meal_planner;
+
 CREATE TABLE IF NOT EXISTS user_profile (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     height_cm INT NOT NULL,
@@ -18,5 +20,5 @@ INSERT INTO
   user_profile (height_cm, weight_kg, age, sex, activity_level,goal)
 VALUES
 (170, 76.0, 25, 'female', 'moderate', 'lose'),
-(160, 45.0, 22, 'male', 'light', 'gain'),
+(165, 43.4, 18, 'male', 'light', 'gain'),
 (180, 80.0, 30, 'male', 'high', 'maintain');

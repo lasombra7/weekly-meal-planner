@@ -1,8 +1,10 @@
+USE meal_planner;
+
 -- ============================
 -- Table: vegetable
 -- Description: Vegetable products
 -- ============================
-USE meal_planner;
+
 CREATE TABLE IF NOT EXISTS vegetable (
   id CHAR(5),
   name VARCHAR(50),

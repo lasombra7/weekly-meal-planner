@@ -1,8 +1,10 @@
+USE meal_planner;
+
 -- ===============================
 -- Table: fruit
 -- Description: Fruit products
 -- ===============================
-USE meal_planner;
+
 CREATE TABLE IF NOT EXISTS fruit (
   id CHAR(5) NOT NULL,
   name VARCHAR(50),

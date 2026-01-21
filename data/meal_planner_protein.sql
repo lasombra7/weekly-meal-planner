@@ -1,8 +1,10 @@
+USE meal_planner;
+
 -- =================================
 -- Table: protein
 -- Description: Protein products
 -- =================================
-USE meal_planner;
+
 CREATE TABLE IF NOT EXISTS protein (
   id CHAR(5),
   name VARCHAR(50),
@@ -14,7 +16,7 @@ CREATE TABLE IF NOT EXISTS protein (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 INSERT INTO
-  protein (id, name, type, weight, calorie, protein)
+  daily_meal_protein (id, name, type, weight, calorie, protein)
 VALUES
   (
     'P1',

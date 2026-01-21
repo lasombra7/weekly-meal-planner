@@ -1,8 +1,10 @@
+USE meal_planner;
+
 -- ============================
 -- Table: dairy
 -- Description: Dairy products
 -- ============================
-USE meal_planner;
+
 CREATE TABLE IF NOT EXISTS dairy (
   id CHAR(5) NOT NULL,
   name VARCHAR(50),

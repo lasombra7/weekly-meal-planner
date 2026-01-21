@@ -1,8 +1,10 @@
+USE meal_planner;
+
 -- =================================
 -- Table: oil
 -- Description: Oil products
 -- =================================
-USE meal_planner;
+
 CREATE TABLE IF NOT EXISTS oil (
   id CHAR(5),
   name VARCHAR(50),

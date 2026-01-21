@@ -1,9 +1,7 @@
-from user_service import generate_weekly_plan_for_user
+from user_service import generate_weekly_plan_for_user, load_latest_weekly_plan
 
-for uid in[1, 2, 3]:
-    result = generate_weekly_plan_for_user(user_id=uid)
-    print(f"user_id={uid}")
-    print("mode:", result["mode"])
-    print("target:", result["targets"])
-    print("week plan:\n", result["weekly_plan"])
-    print("-" * 30)
+plan = load_latest_weekly_plan(user_id=1)
+print(plan["plan_date"])
+print(plan["created_at"])
+print(plan["weekly_plan"])
+print(plan["weekly_plan"][0])

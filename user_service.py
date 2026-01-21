@@ -1,8 +1,35 @@
+import json
 from db_connector import connect_db, load_user_profile
 from calculator import calculate_targets
 from meal_generator import generate_weekly_meal_plan
 from strategies.registry import get_strategy
 
+
+def save_weekly_plan(user_id, weekly_plan):
+    """
+    将生成的一周 meal plan 保存为用户的 weekly plan快照保存.
+    """
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    sql = """
+        INSERT INTO user_weekly_plan (user_id, plan_date, plan_json)
+        VALUES (%s, CURDATE(), %s)
+        ON DUPLICATE KEY UPDATE
+            plan_json = VALUES(plan_json)
+    """
+    cursor.execute(
+        sql,
+        (
+            user_id,
+            json.dumps(weekly_plan, ensure_ascii=False)
+        )
+    )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 def generate_weekly_plan_for_user(
         user_id=None,
@@ -11,7 +38,7 @@ def generate_weekly_plan_for_user(
 ):
     """
     支持两种模式：
-        - User Mode: 通过 user_id 加载已保存的用户信息
+        - User Mode: 通过 user_id 加载已保存的用户信息，并将生成的信息保存在user weekly plan
         - Visitor Mode: 使用临时传入的visitor_profile
     返回包含mode, user_profile, targets, strategy_name, weekly_plan的词典
     """
@@ -36,7 +63,7 @@ def generate_weekly_plan_for_user(
         goal=profile["goal"]
     )
 
-    # 第三步：根据名称获取策略，如果为空则使用random strategy
+    # 第三步：根据名称获取策略，如果为空则使用random strategy。当前阶段仅解析strategy，实际使用在后续阶段接入
     strategy = get_strategy(strategy_name)
 
     # 第四步：生成weekly meal plan （测试用）
@@ -48,6 +75,10 @@ def generate_weekly_plan_for_user(
     )
     conn.close()
 
+    # 第五步：仅在user mode下保存weekly plan
+    if mode == "user":
+        save_weekly_plan(user_id, weekly_plan)
+
     return{
         "mode": mode,
         "user_profile": profile,
@@ -57,4 +88,36 @@ def generate_weekly_plan_for_user(
         },
         "strategy_name": strategy_name,
         "weekly_plan": weekly_plan
+    }
+
+def load_latest_weekly_plan(user_id):
+    """
+    读取指定用户最近一次生成的weekly meal plan
+    如果不存在则返回None
+    """
+
+    conn = connect_db()
+    cursor = conn.cursor(dictionary=True)
+
+    sql = """
+        SELECT plan_json, plan_date, created_at
+        FROM user_weekly_plan
+        WHERE user_id = %s
+        ORDER BY plan_date DESC
+        LIMIT 1
+    """
+
+    cursor.execute(sql, (user_id,))
+    row = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if row is None:
+        return None
+
+    return {
+        "plan_date": row["plan_date"],
+        "created_at": row["created_at"],
+        "weekly_plan": json.loads(row["plan_json"])
     }

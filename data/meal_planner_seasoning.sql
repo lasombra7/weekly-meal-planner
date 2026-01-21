@@ -1,8 +1,10 @@
+USE meal_planner;
+
 -- =================================
 -- Table: seasoning
 -- Description: Seasoning products
 -- =================================
-USE meal_planner;
+
 CREATE TABLE IF NOT EXISTS seasoning (
   id CHAR(5),
   name VARCHAR(50),
