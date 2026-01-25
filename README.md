@@ -1,19 +1,43 @@
 # Weekly Meal Planner
 
-A Python + MySQL system that automatically generates balanced weekly meal plans based on calorie and protein goals.  
-This project integrates structured nutrition data with Python algorithms to produce realistic meal schedules that match health requirements.
+A Python + MySQL system that automatically generates balanced weekly meal plans based on calorie and protein goals.
+This project integrates structured nutrition data with constraint-based planning, strategy-driven selection, and user modeling to produce realistic and extensible meal schedules.
 
 ---
 
 ## Features (Current Phase)
 
-- Generates a full **7-day meal plan** (2 main meals + optional snack per day)  
-- Ensures each day meets **calorie (1600–1800)** and **protein (130–150 g)** targets  
-- Applies strict **lower-bound + upper-bound** logic to main meals and snacks  
-- Automatically determines whether a snack can be added  
-- Flexible food database (main, protein, vegetable, fruit, oil, dairy)  
-- Includes console test view showing detailed food selections  
-- Ready to expand toward nutrition tracking and user personalization  
+- Generates a full **7-day meal plan**
+- Supports **2-meal or 3-meal daily structures**
+- Each day consists of:
+  - Main meals (lunch / dinner or breakfast / lunch / dinner)
+  - Optional snack (fruit + dairy)
+- Ensures each day meets **calorie and protein targets**
+- Applies strict **lower-bound + upper-bound** constraint logic
+- Automatically determines whether a snack can be added
+- Flexible food database (main, protein, vegetable, fruit, oil, dairy)
+- Strategy-based food selection framework
+- Persistent weekly plan storage for registered users
+- Visitor (guest) mode without persistence
+
+---
+
+## System Architecture Overview
+
+The system is structured as a layered planning pipeline:
+
+User / Visitor Input  
+→ Target Calculation (calorie & protein)  
+→ Meal Structure Selection (2-meal / 3-meal)  
+→ Strategy-Based Food Selection  
+→ Constraint-Based Meal Generation  
+→ Weekly Plan Persistence (User Mode)
+
+This separation allows independent experimentation with:
+- user modeling
+- meal structure
+- food selection strategies
+- constraint logic
 
 ---
 
@@ -21,7 +45,13 @@ This project integrates structured nutrition data with Python algorithms to prod
 
 **Language:** Python  
 **Database:** MySQL  
-**Goal:** Connect SQL food data with Python generation logic to create structured weekly meal plans.
+
+The system decouples:
+- data access (DAO layer)
+- target computation
+- strategy-driven food selection
+- meal plan generation
+- persistence logic
 
 ### Database Tables
 
@@ -30,18 +60,26 @@ This project integrates structured nutrition data with Python algorithms to prod
 | `main` | Staple foods | id, name, type, weight, calorie, protein |
 | `protein` | Protein sources | id, name, type, weight, calorie, protein |
 | `vegetable` | Vegetables | id, name, type, weight, calorie, protein |
-| `fruit` | Fruits (used for snacks) | id, name, type, weight, calorie, protein |
 | `oil` | Fats & oils | id, name, type, weight, calorie, protein |
 | `seasoning` | Seasonings | id, name, weight, calorie, protein |
+| `fruit` | Fruits (used for snacks) | id, name, type, weight, calorie, protein |
 | `dairy` | Dairy (used for snacks) | id, name, type, weight, calorie, protein |
-| `meal_plan` | Stored weekly meal plan | id, date, meal_type, main_id, protein_id, vegetable_id, fruit_id, oil_id, seasoning_id, dairy_id, total_calorie, total_protein, total_type |
+| `user_profile` | Persistent user attributes | user_id, height_cm, weight_kg, age, sex, activity_level, goal, created_at |
+| `user_weekly_plan` | Weekly meal plan snapshot (JSON) | id, user_id, plan_date, plan_json, created_at |
+| `daily_meal_record` | Stored weekly meal plan | id, date, meal_type, main_id, protein_id, vegetable_id, fruit_id, oil_id, seasoning_id, dairy_id, total_calorie, total_protein, total_type |
 
 ---
 
-## Project Goal
+## Strategy Framework
 
-This project is a practical experiment combining **data modeling**, **SQL**, and **Python generation logic**.  
-It is also the foundation for a future **research-oriented, personalized, and explainable meal planning system**.
+Meal selection logic is abstracted via a unified strategy interface.
+
+Available strategies:
+- **RandomStrategy** — baseline randomized selection
+- **GreedyStrategy** — protein-density–priority selection
+- **WeightedStrategy** — probabilistic selection weighted by protein density
+
+Strategies are registered centrally and injected at runtime without modifying core generation logic.
 
 ---
 
@@ -102,37 +140,48 @@ Extend the generator into a **multi-strategy planning framework** that adapts to
 
 ---
 
-### Phase 4: User Modeling & Personalization ✅ *(Completed)*
+### Phase 4: User Modeling & Personalized Targets ✅ *(Completed)*
 
 **Goal:**  
-Move from static targets to **user-centered personalized meal planning**.
+Move from static nutrition targets to **user-centered, profile-driven meal planning**.
 
-**Planned Features**
-- Add `user_profile` table:
-  - user_id, height, weight, age, sex, activity_level, goal  
-- Support two operating modes:
-  - **User Mode:** load saved user profiles  
-  - **Visitor Mode:** temporary input without persistence  
-- Integrate a target calculation module:
-  - Compute calorie & protein targets from user attributes  
-  - Adjust targets based on selected goal  
-- Store generated meal plans linked to user_id and date
+**Design Focus:**
+- Separate *user modeling* from *meal generation logic*
+- Support both persistent users and temporary visitors
+- Compute calorie and protein targets dynamically from user attributes
+- Prepare the system for multi-user and personalized planning scenarios
 
 **Completed Tasks**
-- [x] Introduced a user-driven planning entry point decoupled from meal generation logic
-- [x] Supported two operating modes:
-      - User Mode: load persistent user profiles (interface prepared)
-      - Visitor Mode: temporary user input without persistence  
-- [x] Integrated a target calculation module to derive calorie and protein targets from user attributes  
-- [x] Enabled goal-aware target generation via calculator logic (maintenance / fat loss / gain)
-- [x] Fully decoupled user modeling, target computation, and meal planning flow
-- [x] Implement persistent user_profile table in database (user_id, height, weight, age, sex, activity_level, goal)
-- [x] Replace stubbed user loading logic with database-backed DAO layer
-- [x] Support multi-user scenarios and profile switching
-- [x] Store generated meal plans linked to user_id and date
-- [x] Enable strategy selection to be driven by user preferences
-- [x] Prepare user-linked data for explainability and evaluation phases
+- [x] Designed and implemented `user_profile` table (height / weight / age / sex / activity_level / goal)
+- [x] Introduced **User Mode** (persistent profiles stored in database)  
+- [x] Introduced **Visitor Mode** (temporary input without persistence)  
+- [x] Implemented calorie & protein target calculation module  
+- [x] Supported goal-aware target adjustment (maintain / lose / gain)  
+- [x] Decoupled user modeling, target computation, and meal generation  
+- [x] Implemented persistent weekly plan storage (`user_weekly_plan`)  
+- [x] Enabled loading latest weekly meal plan snapshot per user  
+- [x] Supported multi-user profile switching and independent plan generation  
 
+---
+
+### Phase 4.5: Meal Structure Modeling 🚧 *(In Progress)*
+
+**Goal:**  
+Introduce **flexible daily meal structures** while preserving existing nutrition constraints.
+
+**Design Focus:**
+- Treat meal structure (2-meal / 3-meal) as a *structural parameter*, not a nutrition change
+- Reuse existing constraint logic with different per-meal target allocations
+- Keep meal structure independent from strategy and food selection logic
+
+**Planned Features**
+- Allow selection of daily meal structure:
+  - **2-meal structure** (e.g. lunch + dinner)
+  - **3-meal structure** (breakfast + lunch + dinner)
+- Bind meal structure preference to `user_profile`
+- Allow visitor-mode override without persistence
+- Allocate calorie and protein targets proportionally across meals
+- Preserve optional snack logic under both structures
 
 ---
 
@@ -141,38 +190,46 @@ Move from static targets to **user-centered personalized meal planning**.
 **Goal:**  
 Make meal plan generation **transparent, interpretable, and measurable**.
 
+**Design Focus:**
+- Expose *why* a specific food or meal combination was selected
+- Separate explanation logic from generation logic
+- Enable systematic evaluation of plan quality and stability
+
 **Planned Features**
-- Explainable decision logs for each generated day:
-  - Why a specific food or protein source was selected  
+- Generate explanation metadata for each day:
   - Why a snack was added or omitted  
-  - Which constraint influenced the decision  
-- Structured explanation output (console and optional database storage)  
-- Introduce evaluation metrics:
+  - Which constraint was binding (calorie / protein)  
+  - Which strategy influenced the selection  
+- Add evaluation metrics:
   - Daily calorie deviation from target  
   - Daily protein deviation from target  
   - Snack usage frequency  
   - Ingredient repetition rate  
+- Support console-level explainability output  
+- Optional database storage for explanation records  
 
 ---
 
 ### Phase 6: Feedback Loop, Reproducibility & System Polish *(Planned)*
 
 **Goal:**  
-Evolve the project into a **reproducible experimental system** suitable for research and long-term extension.
+Evolve the project into a **reproducible experimental system** suitable for long-term research and extension.
+
+**Design Focus:**
+- Close the loop between generated plans and real user outcomes
+- Improve experiment reproducibility and configuration control
+- Strengthen system modularity and usability
 
 **Planned Features**
-- Add user weight log table (`user_log`)
-  - Track weekly weight changes  
-  - Adjust calorie targets using simple feedback rules  
-- Ensure reproducible meal generation:
-  - Support fixed random seeds  
-  - Centralized configuration file for parameters  
-- Modularize project structure:
-  - Separate database access, planning logic, strategies, and evaluation  
-- Improve usability and reproducibility:
+- Introduce user weight log table for longitudinal tracking  
+- Implement simple feedback rules to adjust calorie targets over time  
+- Support reproducible meal generation via fixed random seeds  
+- Centralize system parameters into configuration files  
+- Add environment and dependency setup artifacts:
   - `requirements.txt`  
   - `.env.example`  
-  - Database initialization scripts  
+  - database initialization scripts  
+- Further modularize DAO, planning, strategy, and evaluation layers  
 
 ---
 
