@@ -3,6 +3,32 @@ from strategies.registry import get_strategy
 import random
 
 
+def generate_daily_meal_with_structure(conn, target_cal, protein_range, meal_structure="two_meals", strategy=None):
+    """
+    区分生成 two_meal_day 还是 three_meal_day。
+    two_meal_day: Lunch 分配 40% calorie, 40% protein。 Dinner 分配 60% calorie, 60% protein。
+    three_meal_day: Breakfast 分配 25% calorie, 25% protein。 Lunch 分配 35% calorie, 35% protein。 Dinner 分配 40% calorie, 40% protein。
+    """
+    if meal_structure == "two_meals":
+        return generate_two_meal_day(conn, target_cal,protein_range)
+    elif meal_structure == "three_meals":
+        return generate_three_meal_day(conn, target_cal, protein_range)
+    else:
+        raise ValueError("Unknown meal_structure")
+
+# 两餐制分配比例
+TWO_MEAL_DISTRIBUTION = {"lunch": 0.4,"dinner": 0.6}
+assert abs(
+    TWO_MEAL_DISTRIBUTION["lunch"] + TWO_MEAL_DISTRIBUTION["dinner"] - 1.0
+) < 1e-6, "TWO_MEAL_DISTRIBUTION ratios must sum to 1.0"
+
+# 三餐制分配比例
+THREE_MEAL_DISTRIBUTION = {"breakfast": 0.25, "lunch": 0.35, "dinner": 0.4}
+assert abs(
+    THREE_MEAL_DISTRIBUTION["breakfast"] + THREE_MEAL_DISTRIBUTION["lunch"] + THREE_MEAL_DISTRIBUTION["dinner"] - 1.0
+) < 1e-6, "THREE_MEAL_DISTRIBUTION ratios must sum to 1.0"
+
+# two_meal_day
 # 生成主餐
 def generate_main_meal(conn, calorie_target, protein_target, strategy=None):
     """
@@ -67,11 +93,11 @@ def generate_snack(conn):
     }
 
 # 生成每日食谱（两餐+可选加餐）
-def generate_daily_meal(conn,
+def generate_two_meal_day(conn,
                         target_cal = 1700,
                         protein_range=(130, 150)):    #calorie_range在此后可能更改
     """
-    生成一日菜单：
+    生成一日菜单(two_meal_day)：
         - 两顿主餐（main + protein + vegetable）
         - 若总日热量低于target_cal，自动添加snack（fruit + dairy）
     """
@@ -79,11 +105,13 @@ def generate_daily_meal(conn,
     cal_lower_bound = target_cal - 100
     cal_upper_bound = target_cal + 100
     protein_lower_bound, protein_upper_bound = protein_range
+    lunch_ratio = TWO_MEAL_DISTRIBUTION["lunch"]
+    dinner_ratio = TWO_MEAL_DISTRIBUTION["dinner"]
 
     # 生成两顿主餐
     for _ in range(50):
-        meal_lunch = generate_main_meal(conn, target_cal / 2, protein_lower_bound / 2)
-        meal_dinner = generate_main_meal(conn, target_cal / 2, protein_lower_bound / 2)
+        meal_lunch = generate_main_meal(conn, target_cal * lunch_ratio, protein_lower_bound * lunch_ratio)
+        meal_dinner = generate_main_meal(conn, target_cal * dinner_ratio, protein_lower_bound * dinner_ratio)
 
         total_main_cal = meal_lunch["total_calorie"] + meal_dinner["total_calorie"]
         total_main_protein = meal_lunch["total_protein"] + meal_dinner["total_protein"]
@@ -129,18 +157,22 @@ def generate_daily_meal(conn,
         }
     }
 
+# three_meal_day
+def generate_three_meal_day(conn,target_cal, protein_range):
+    """
+    three_meal_day 占位实现
+    当前暂时复用 two_meals 逻辑，后续替换为真实三餐分配
+    """
+    return generate_two_meal_day(conn, target_cal, protein_range)
+
 # 生成7日计划
-def generate_weekly_meal_plan(conn,
-                              target_cal=1700,
-                              protein_range=(130,150)):
+def generate_weekly_meal_plan(conn, target_cal=1700, protein_range=(130,150), meal_structure="two_meals"):
     """
     自动生成7天的菜单。
     """
     weekly_plan = []
     for day in range(1,8):
-        daily_plan = generate_daily_meal(conn,
-                                         target_cal=target_cal,
-                                         protein_range=protein_range)
+        daily_plan = generate_daily_meal_with_structure(conn, target_cal=target_cal, protein_range=protein_range, meal_structure=meal_structure)
         weekly_plan.append({"day": day, **daily_plan})
     return weekly_plan
 

@@ -5,36 +5,11 @@ from meal_generator import generate_weekly_meal_plan
 from strategies.registry import get_strategy
 
 
-def save_weekly_plan(user_id, weekly_plan):
-    """
-    将生成的一周 meal plan 保存为用户的 weekly plan快照保存.
-    """
-
-    conn = connect_db()
-    cursor = conn.cursor()
-
-    sql = """
-        INSERT INTO user_weekly_plan (user_id, plan_date, plan_json)
-        VALUES (%s, CURDATE(), %s)
-        ON DUPLICATE KEY UPDATE
-            plan_json = VALUES(plan_json)
-    """
-    cursor.execute(
-        sql,
-        (
-            user_id,
-            json.dumps(weekly_plan, ensure_ascii=False)
-        )
-    )
-
-    conn.commit()
-    cursor.close()
-    conn.close()
-
 def generate_weekly_plan_for_user(
         user_id=None,
         visitor_profile=None,
         strategy_name="random",
+        meal_structure="two_meals"
 ):
     """
     支持两种模式：
@@ -68,11 +43,7 @@ def generate_weekly_plan_for_user(
 
     # 第四步：生成weekly meal plan （测试用）
     conn = connect_db()
-    weekly_plan = generate_weekly_meal_plan(
-        conn,
-        target_cal=target_cal,
-        protein_range=protein_range
-    )
+    weekly_plan = generate_weekly_meal_plan(conn, target_cal=target_cal, protein_range=protein_range, meal_structure=meal_structure)
     conn.close()
 
     # 第五步：仅在user mode下保存weekly plan
@@ -89,6 +60,32 @@ def generate_weekly_plan_for_user(
         "strategy_name": strategy_name,
         "weekly_plan": weekly_plan
     }
+
+def save_weekly_plan(user_id, weekly_plan):
+    """
+    将生成的一周 meal plan 保存为用户的 weekly plan快照保存.
+    """
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    sql = """
+        INSERT INTO user_weekly_plan (user_id, plan_date, plan_json)
+        VALUES (%s, CURDATE(), %s)
+        ON DUPLICATE KEY UPDATE
+            plan_json = VALUES(plan_json)
+    """
+    cursor.execute(
+        sql,
+        (
+            user_id,
+            json.dumps(weekly_plan, ensure_ascii=False)
+        )
+    )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 def load_latest_weekly_plan(user_id):
     """
