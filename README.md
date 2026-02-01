@@ -173,15 +173,26 @@ Introduce **flexible daily meal structures** while preserving existing nutrition
 - Treat meal structure (2-meal / 3-meal) as a *structural parameter*, not a nutrition change
 - Reuse existing constraint logic with different per-meal target allocations
 - Keep meal structure independent from strategy and food selection logic
+- Ensure both structures support optional snack logic consistently
 
-**Planned Features**
-- Allow selection of daily meal structure:
-  - **2-meal structure** (e.g. lunch + dinner)
-  - **3-meal structure** (breakfast + lunch + dinner)
-- Bind meal structure preference to `user_profile`
-- Allow visitor-mode override without persistence
-- Allocate calorie and protein targets proportionally across meals
-- Preserve optional snack logic under both structures
+**Completed Tasks**
+- [x] Introduced `meal_structure` as an explicit planning parameter  
+- [x] Refactored legacy daily generation into `generate_two_meal_day()`  
+- [x] Defined clear per-meal calorie & protein distributions:
+  - 2-meal structure: Lunch (40%), Dinner (60%)
+  - 3-meal structure: Breakfast (25%), Lunch (35%), Dinner (40%)
+- [x] Centralized meal structure routing via `generate_daily_meal_with_structure()`  
+- [x] Preserved calorie & protein validation logic across meal structures  
+- [x] Enabled optional snack generation for both 2-meal and 3-meal days  
+- [x] Ensured weekly plan generation remains structure-agnostic  
+
+**Incompleted Tasks**
+- [ ] Bind `meal_structure` preference to `user_profile` (persistent users)  
+- [ ] Support visitor-mode meal structure override without persistence  
+- [ ] Expose meal structure selection via CLI or configuration layer  
+- [ ] Add validation for incompatible goal × meal_structure combinations  
+- [ ] Improve explainability output (per-meal target breakdown)  
+- [ ] Add unit tests for per-meal allocation correctness  
 
 ---
 
