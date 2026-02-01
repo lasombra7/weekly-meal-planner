@@ -164,7 +164,7 @@ Move from static nutrition targets to **user-centered, profile-driven meal plann
 
 ---
 
-### Phase 4.5: Meal Structure Modeling 🚧 *(In Progress)*
+### Phase 4.5: Meal Structure Modeling ✅ *(Completed)*
 
 **Goal:**  
 Introduce **flexible daily meal structures** while preserving existing nutrition constraints.
@@ -184,15 +184,9 @@ Introduce **flexible daily meal structures** while preserving existing nutrition
 - [x] Centralized meal structure routing via `generate_daily_meal_with_structure()`  
 - [x] Preserved calorie & protein validation logic across meal structures  
 - [x] Enabled optional snack generation for both 2-meal and 3-meal days  
-- [x] Ensured weekly plan generation remains structure-agnostic  
-
-**Incompleted Tasks**
-- [ ] Bind `meal_structure` preference to `user_profile` (persistent users)  
-- [ ] Support visitor-mode meal structure override without persistence  
-- [ ] Expose meal structure selection via CLI or configuration layer  
-- [ ] Add validation for incompatible goal × meal_structure combinations  
-- [ ] Improve explainability output (per-meal target breakdown)  
-- [ ] Add unit tests for per-meal allocation correctness  
+- [x] Ensured weekly plan generation remains structure-agnostic
+- [x] Bind `meal_structure` preference to `user_profile` (persistent users)  
+- [x] Support visitor-mode meal structure override without persistence
 
 ---
 
