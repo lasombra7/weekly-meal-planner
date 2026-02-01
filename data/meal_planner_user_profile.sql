@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS user_profile (
     sex ENUM('female', 'male') NOT NULL,
     activity_level ENUM('low', 'light', 'moderate', 'high') NOT NULL,
     goal ENUM('maintain', 'lose', 'gain') NOT NULL,
+    meal_structure ENUM('two_meals', 'three_meals') NOT NULL DEFAULT 'two_meals',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 

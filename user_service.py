@@ -9,7 +9,6 @@ def generate_weekly_plan_for_user(
         user_id=None,
         visitor_profile=None,
         strategy_name="random",
-        meal_structure="two_meals"
 ):
     """
     支持两种模式：
@@ -37,6 +36,10 @@ def generate_weekly_plan_for_user(
         activity_level=profile["activity_level"],
         goal=profile["goal"]
     )
+    if mode == "visitor":
+        meal_structure = visitor_profile.get("meal_structure", "two_meals")
+    else:
+        meal_structure = profile.get("meal_structure", "two_meals")
 
     # 第三步：根据名称获取策略，如果为空则使用random strategy。当前阶段仅解析strategy，实际使用在后续阶段接入
     strategy = get_strategy(strategy_name)
