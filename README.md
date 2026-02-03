@@ -190,7 +190,7 @@ Introduce **flexible daily meal structures** while preserving existing nutrition
 
 ---
 
-### Phase 5: Explainable Planning & Evaluation *(Planned)*
+### Phase 5: Explainable Planning & Evaluation 🚧 *(Planned)*
 
 **Goal:**  
 Make meal plan generation **transparent, interpretable, and measurable**.
@@ -200,18 +200,16 @@ Make meal plan generation **transparent, interpretable, and measurable**.
 - Separate explanation logic from generation logic
 - Enable systematic evaluation of plan quality and stability
 
-**Planned Features**
-- Generate explanation metadata for each day:
-  - Why a snack was added or omitted  
-  - Which constraint was binding (calorie / protein)  
-  - Which strategy influenced the selection  
-- Add evaluation metrics:
-  - Daily calorie deviation from target  
-  - Daily protein deviation from target  
-  - Snack usage frequency  
-  - Ingredient repetition rate  
-- Support console-level explainability output  
-- Optional database storage for explanation records  
+**Completed Tasks**
+None
+
+**Incompleted Tasks**
+- [ ] Add explainability signals to meal plan output
+- [ ] Surface key decision factors used during generation
+- [ ] Introduce basic evaluation metrics for daily and weekly plans
+- [ ] Support user-facing explainability output (e.g. console-level)
+- [ ] Enable optional persistence of explanation or evaluation results
+- [ ] Add basic testing coverage for explanation and evaluation logic
 
 ---
 
