@@ -201,12 +201,11 @@ Make meal plan generation **transparent, interpretable, and measurable**.
 - Enable systematic evaluation of plan quality and stability
 
 **Completed Tasks**
-None
+- [x] Surface key decision factors used during generation
+- [x] Introduce basic evaluation metrics for daily and weekly plans
 
 **Incompleted Tasks**
 - [ ] Add explainability signals to meal plan output
-- [ ] Surface key decision factors used during generation
-- [ ] Introduce basic evaluation metrics for daily and weekly plans
 - [ ] Support user-facing explainability output (e.g. console-level)
 - [ ] Enable optional persistence of explanation or evaluation results
 - [ ] Add basic testing coverage for explanation and evaluation logic
