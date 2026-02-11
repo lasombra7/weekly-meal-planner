@@ -190,7 +190,7 @@ Introduce **flexible daily meal structures** while preserving existing nutrition
 
 ---
 
-### Phase 5: Explainable Planning & Evaluation 🚧 *(Planned)*
+### Phase 5: Explainable Planning & Evaluation ✅ *(Completed)*
 
 **Goal:**  
 Make meal plan generation **transparent, interpretable, and measurable**.
@@ -203,12 +203,9 @@ Make meal plan generation **transparent, interpretable, and measurable**.
 **Completed Tasks**
 - [x] Surface key decision factors used during generation
 - [x] Introduce basic evaluation metrics for daily and weekly plans
-
-**Incompleted Tasks**
-- [ ] Add explainability signals to meal plan output
-- [ ] Support user-facing explainability output (e.g. console-level)
-- [ ] Enable optional persistence of explanation or evaluation results
-- [ ] Add basic testing coverage for explanation and evaluation logic
+- [x] Add explainability signals to meal plan output
+- [x] Support user-facing explainability output (e.g. console-level)
+- [x] Add basic testing coverage for explanation and evaluation logic
 
 ---
 
@@ -231,7 +228,8 @@ Evolve the project into a **reproducible experimental system** suitable for long
   - `requirements.txt`  
   - `.env.example`  
   - database initialization scripts  
-- Further modularize DAO, planning, strategy, and evaluation layers  
+- Further modularize DAO, planning, strategy, and evaluation layers
+- Enable optional persistence of explanation or evaluation results
 
 ---
 
