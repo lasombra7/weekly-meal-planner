@@ -3,6 +3,9 @@ from db_connector import connect_db, load_user_profile
 from calculator import calculate_targets
 from meal_generator import generate_weekly_meal_plan
 from strategies.registry import get_strategy
+from explanation.daily_explainer import explain_daily_plan
+from explanation.daily_metrics import evaluate_daily_plan
+from explanation.weekly_evaluator import evaluate_weekly_plan
 
 
 def generate_weekly_plan_for_user(
@@ -53,6 +56,21 @@ def generate_weekly_plan_for_user(
     if mode == "user":
         save_weekly_plan(user_id, weekly_plan)
 
+    # Phase 5 Integration
+    daily_explanations = []
+    daily_metrics_list = []
+    for day in weekly_plan:
+        explanation = explain_daily_plan(
+            daily_plan=day,
+            strategy_name=strategy_name,
+            meal_structure=meal_structure,
+            generation_attempts=None
+        )
+        metrics = evaluate_daily_plan(day)
+        daily_explanations.append(explanation)
+        daily_metrics_list.append(metrics)
+    weekly_metrics = evaluate_weekly_plan(daily_metrics_list)
+
     return{
         "mode": mode,
         "user_profile": profile,
@@ -61,7 +79,12 @@ def generate_weekly_plan_for_user(
             "protein_range": protein_range
         },
         "strategy_name": strategy_name,
-        "weekly_plan": weekly_plan
+        "weekly_plan": weekly_plan,
+
+        # Phase 5 additions
+        "daily_explanations": daily_explanations,
+        "daily_metrics": daily_metrics_list,
+        "weekly_metrics": weekly_metrics
     }
 
 def save_weekly_plan(user_id, weekly_plan):
