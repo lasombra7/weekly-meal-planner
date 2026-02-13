@@ -6,40 +6,33 @@ USE meal_planner;
 -- =================================
 
 CREATE TABLE IF NOT EXISTS seasoning (
-  id CHAR(5),
-  name VARCHAR(50),
-  type VARCHAR(20),
-  weight INT COMMENT 'Unit: g',
-  calorie INT COMMENT 'Unit: kcal',
-  protein FLOAT COMMENT 'Unit: g',
-  PRIMARY KEY (id)
+  id CHAR(5) PRIMARY KEY,
+  name VARCHAR(80),
+  food_group VARCHAR(30),  -- Sauce / Acid / Paste / Spice / Aromatics
+  food_subgroup VARCHAR(40), 
+  calorie_per_100g FLOAT COMMENT 'Unit: kcal',
+  protein_per_100g FLOAT COMMENT 'Unit: g',
+  carb_per_100g FLOAT COMMENT 'Unit: g',
+  fat_per_100g FLOAT COMMENT 'Unit: g'
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-INSERT INTO
-  seasoning (id, name, type, weight, calorie, protein)
+INSERT INTO seasoning
+(id, name, food_group, food_subgroup, calorie_per_100g, protein_per_100g, carb_per_100g, fat_per_100g)
 VALUES
-  (
-    'S1',
-    'Soy Sauce (1 tbsp)',
-    'Soy Sauce',
-    16,
-    10,
-    1.5
-  ),
-  ('S2', 'Vinegar (1 tbsp)', 'Vinegar', 15, 3, 0.0),
-  (
-    'S3',
-    'Oyster Sauce (1 tbsp)',
-    'Oyster Sauce',
-    15,
-    15,
-    0.3
-  ),
-  (
-    'S4',
-    'Steamed Fish Soy Sauce (1 tbsp)',
-    'Fish Soy Sauce',
-    16,
-    10,
-    1.0
-  );
+-- Sauces
+('S1', 'Soy Sauce', 'Sauce', 'Soy Sauce', 53, 8.1, 4.9, 0.1),
+('S2', 'Oyster Sauce', 'Sauce', 'Oyster Sauce', 51, 1.3, 11.0, 0.0),
+('S3', 'Fish Sauce', 'Sauce', 'Fish Sauce', 35, 5.0, 0.7, 0.0),
+
+-- Acid
+('S4', 'Vinegar', 'Acid', 'Vinegar', 18, 0.0, 0.0, 0.0),
+
+-- Paste
+('S5', 'Miso Paste', 'Paste', 'Miso', 199, 12.0, 26.0, 6.0),
+
+-- Spice
+('S6', 'Black Pepper', 'Spice', 'Pepper', 251, 10.0, 64.0, 3.3),
+
+-- Aromatics
+('S7', 'Green Onion (Raw)', 'Aromatic', 'Green Onion', 32, 1.8, 7.3, 0.2),
+('S8', 'Ginger (Raw)', 'Aromatic', 'Ginger', 80, 1.8, 18.0, 0.8);
