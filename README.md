@@ -47,26 +47,26 @@ This separation allows independent experimentation with:
 **Database:** MySQL  
 
 The system decouples:
-- data access (DAO layer)
-- target computation
-- strategy-driven food selection
-- meal plan generation
-- persistence logic
+- Data Access Layer (DAO): Responsible for retrieving normalized food data from the database.
+- Target Computation Layer: Computes daily nutritional targets based on user profile and goals.
+- Strategy Layer: Applies rule-based heuristics to select food categories and meal composition.
+- Meal Generation Layer: Performs portion scaling and target-driven nutrient balancing.
+- Persistence Layer: Stores generated plans and evaluation metrics as JSON snapshots.
 
 ### Database Tables
 
 | Table | Description | Columns |
 |------|------------|---------|
-| `main` | Staple foods | id, name, type, weight, calorie, protein |
-| `protein` | Protein sources | id, name, type, weight, calorie, protein |
-| `vegetable` | Vegetables | id, name, type, weight, calorie, protein |
-| `oil` | Fats & oils | id, name, type, weight, calorie, protein |
-| `seasoning` | Seasonings | id, name, weight, calorie, protein |
-| `fruit` | Fruits (used for snacks) | id, name, type, weight, calorie, protein |
-| `dairy` | Dairy (used for snacks) | id, name, type, weight, calorie, protein |
+| `main` | Staple foods(carbohydrate-dominant) | id, name, food_group, food_subgroup, calorie_per_100g, protein_per_100g, carb_per_100g, fat_per_100g |
+| `protein` | Protein sources (raw standardized) | id, name, food_group, food_subgroup, calorie_per_100g, protein_per_100g, carb_per_100g, fat_per_100g |
+| `vegetable` | Vegetables | id, name, food_group, food_subgroup, calorie_per_100g, protein_per_100g, carb_per_100g, fat_per_100g |
+| `oil` | Fats & oils | id, name, food_group, food_subgroup, calorie_per_100g, protein_per_100g, carb_per_100g, fat_per_100g |
+| `seasoning` | Seasonings | id, name, food_group, food_subgroup, calorie_per_100g, protein_per_100g, carb_per_100g, fat_per_100g |
+| `fruit` | Fruits (used for snacks) | id, name, food_group, food_subgroup, calorie_per_100g, protein_per_100g, carb_per_100g, fat_per_100g |
+| `dairy` | Dairy (used for snacks) | id, name, food_group, food_subgroup, calorie_per_100g, protein_per_100g, carb_per_100g, fat_per_100g |
 | `user_profile` | Persistent user attributes | user_id, height_cm, weight_kg, age, sex, activity_level, goal, created_at |
-| `user_weekly_plan` | Weekly meal plan snapshot (JSON) | id, user_id, plan_date, plan_json, created_at |
-| `daily_meal_record` | Stored weekly meal plan | id, date, meal_type, main_id, protein_id, vegetable_id, fruit_id, oil_id, seasoning_id, dairy_id, total_calorie, total_protein, total_type |
+| `user_weekly_plan` | Weekly meal plan snapshot with versioning and macro summary | id, user_id, plan_date, plan_version, plan_json, total_calorie_week, total_protein_week, total_carb_week, total_fat_week, created_at |
+| `daily_meal_record` | Generated daily meal records with selected food items and macro summary | id, date, meal_type, main_id, protein_id, vegetable_id, fruit_id, oil_id, seasoning_id, dairy_id, total_calorie, total_protein, total_carb, total_fat, food_item_count |
 
 ---
 
@@ -209,7 +209,7 @@ Make meal plan generation **transparent, interpretable, and measurable**.
 
 ---
 
-### Phase 6: Feedback Loop, Reproducibility & System Polish *(Planned)*
+### Phase 6: Feedback Loop, Reproducibility & System Polish *(In Progress)*
 
 **Goal:**  
 Evolve the project into a **reproducible experimental system** suitable for long-term research and extension.
@@ -235,23 +235,67 @@ Evolve the project into a **reproducible experimental system** suitable for long
 
 ## Long-Term Vision
 
-This project serves as a foundation for future work in:
+This project serves as a foundation for future research and system expansion in:
 
-- Constraint-based optimization  
-- Personalized recommendation systems  
-- Explainable planning algorithms  
-- Data-driven health and fitness applications  
+### 1. Macro-Aware Nutritional Planning
+- Multi-macro tracking (calorie, protein, carbohydrate, fat)
+- Macro-balanced meal generation
+- Portion-adjustable meal construction
+- Goal-aware macro distribution strategies (cut, bulk, maintenance)
 
+### 2. Constraint-Based Optimization
+- Linear programming for macro and calorie constraints
+- Hard vs soft constraint modeling
+- Multi-objective optimization (nutrition + diversity + cost)
+
+### 3. Personalized Recommendation Systems
+- User-specific preference modeling
+- Habit-aware meal generation
+- Diversity-aware food rotation
+- Adaptive macro targeting
+
+### 4. Explainable Planning Algorithms
+- Traceable food selection reasoning
+- Constraint satisfaction transparency
+- Version-controlled generation logic
+- Reproducible weekly plan snapshots
+
+### 5. Food Diversity & Statistical Analysis
+- Food group coverage metrics
+- Weekly diversity scoring
+- Macro distribution variance tracking
+- Longitudinal user nutrition pattern analysis
+
+### 6. Scalable Health Data Platform
+- Structured food taxonomy (food_group / food_subgroup)
+- Macro-aware database schema
+- Version-controlled plan storage
+- Research-ready experimental framework
 ---
 
 ## Summary
 
 This project is not just a meal generator.  
-It is a **data-driven, constraint-based, and extensible planning framework** that integrates:
+It is a **data-driven, constraint-based, and extensible planning framework** built with a modular architecture that decouples:
 
-- Structured SQL databases  
-- Rule-based and strategy-based generation logic  
-- User modeling and personalization  
-- Explainability, evaluation, and reproducibility  
+- Data access (DAO layer)
+- Target computation
+- Strategy-driven food selection
+- Portion-aware meal generation
+- Persistence and evaluation logic
 
-The system is designed to grow into a research-oriented platform suitable for graduate-level study and experimentation.
+The system integrates:
+
+- Structured SQL databases (raw-standardized, per-100g macro schema)
+- Target-driven protein scaling
+- Rule-based and strategy-based generation logic
+- User modeling and personalization
+- Explainability, evaluation, and weekly stability metrics
+- Forward-compatible macro support (carb/fat ready)
+
+Version 1.0 focuses on calorie- and protein-driven planning with explainable 
+evaluation metrics. The architecture is intentionally designed to support 
+future multi-objective optimization without disrupting the core system.
+
+The system is designed to evolve into a research-oriented planning platform 
+suitable for graduate-level study, experimentation, and optimization research.
