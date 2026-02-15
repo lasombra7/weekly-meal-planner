@@ -1,6 +1,6 @@
-from strategies.random_strategy import RandomStrategy
-from strategies.greedy_strategy import GreedyStrategy
-from strategies.weighted_strategy import WeightedStrategy
+from src.strategies.random_strategy import RandomStrategy
+from src.strategies.greedy_strategy import GreedyStrategy
+from src.strategies.weighted_strategy import WeightedStrategy
 
 
 _STRATEGY_REGISTRY = {

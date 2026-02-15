@@ -1,11 +1,11 @@
 import json
-from db_connector import connect_db, load_user_profile
-from calculator import calculate_targets
-from meal_generator import generate_weekly_meal_plan
-from strategies.registry import get_strategy
-from explanation.daily_explainer import explain_daily_plan
-from explanation.daily_metrics import evaluate_daily_plan
-from explanation.weekly_evaluator import evaluate_weekly_plan
+from src.db.db_connector import connect_db, load_user_profile
+from src.core.calculator import calculate_targets
+from src.core.meal_generator import generate_weekly_meal_plan
+from src.strategies.registry import get_strategy
+from src.explanation.daily_explainer import explain_daily_plan
+from src.explanation.daily_metrics import evaluate_daily_plan
+from src.explanation.weekly_evaluator import evaluate_weekly_plan
 
 
 def generate_weekly_plan_for_user(

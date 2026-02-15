@@ -35,13 +35,13 @@ def get_random_meal():
     }
 
     #计算总热量和蛋白质
-    total_calorie = sum(item["calorie"] for item in meal.values())
-    total_protein = sum(item["protein"] for item in meal.values())
+    total_calorie = sum(item["calorie_per_100g"] for item in meal.values())
+    total_protein = sum(item["protein_per_100g"] for item in meal.values())
 
     #输出推荐部分
     print("\n Today's Menu Recommendations：")
     for category, item in meal.items():
-        print(f"{category.capitalize():<10} : {item['name']} ({item['calorie']}kcal, {item['protein']}g protein)")
+        print(f"{category.capitalize():<10} : {item['name']} ({item['calorie_per_100g']}kcal, {item['protein_per_100g']}g protein)")
     print(f"\nTotal calorie： {total_calorie} kcal")
     print(f"\nTotal protein: {total_protein} g")
 

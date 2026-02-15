@@ -1,5 +1,5 @@
-from db_connector import connect_db, get_foods
-from strategies.registry import get_strategy
+from src.db.db_connector import connect_db, get_foods
+from src.strategies.registry import get_strategy
 import random
 
 
@@ -54,8 +54,8 @@ def generate_main_meal(conn, calorie_target, protein_target, strategy=None):
     }
 
     # 计算总热量和蛋白质
-    total_cal = sum(item["calorie"] for item in meal.values())
-    total_protein = sum(item["protein"] for item in meal.values())
+    total_cal = sum(item["calorie_per_100g"] for item in meal.values())
+    total_protein = sum(item["protein_per_100g"] for item in meal.values())
 
     return{
         "type": "main_meal",
@@ -81,8 +81,8 @@ def generate_snack(conn):
         "dairy": dairy
     }
 
-    total_cal = sum(item["calorie"] for item in snack.values())
-    total_protein = sum(item["protein"] for item in snack.values())
+    total_cal = sum(item["calorie_per_100g"] for item in snack.values())
+    total_protein = sum(item["protein_per_100g"] for item in snack.values())
 
     return {
         "type": "snack",
@@ -248,14 +248,14 @@ if __name__ == "__main__":
         for meal in day["meals"]:
             print(f"{meal['type'].title()}:")
             for category, item in meal["meal_items"].items():
-                print(f"  -  {category.title()}:{item['name']} ({item['calorie']} kcal, {item['protein']} g protein)")
+                print(f"  -  {category.title()}:{item['name']} ({item['calorie_per_100g']} kcal, {item['protein_per_100g']} g protein)")
             print(f"  →  Total:{meal['total_calorie']} kcal, {meal['total_protein']} g protein \n")
 
         # 如果有snack，打印snack详情
         snack = day["snack_option"]
         print(f"Snack option({'Allowed' if day['snack_allowed'] else 'Optional only'}):")
         for category, item in snack["items"].items():
-            print(f"  -  {category.title()}: {item['name']} ({item['calorie']} kcal, {item['protein']} g protein)")
+            print(f"  -  {category.title()}: {item['name']} ({item['calorie_per_100g']} kcal, {item['protein_per_100g']} g protein)")
         print(f"  →  Total:{snack['total_calorie']} kcal, {snack['total_protein']} g protein")
         print("=" * 60)
 
@@ -269,7 +269,7 @@ if __name__ == "__main__":
     )
 
     for category, item in meal["meal_items"].items():
-        print(f"  -  {category.title()}: {item['name']} ({item['calorie']} kcal, {item['protein']} g protein)")
+        print(f"  -  {category.title()}: {item['name']} ({item['calorie_per_100g']} kcal, {item['protein_per_100g']} g protein)")
     print(f"  →  Total:{meal['total_calorie']} kcal, {meal['total_protein']} g protein \n")
 
     # ===== 现测试Weighted Strategy =====
@@ -282,7 +282,7 @@ if __name__ == "__main__":
     )
 
     for category, item in meal["meal_items"].items():
-        print(f"  -  {category.title()}: {item['name']} ({item['calorie']} kcal, {item['protein']} g protein)")
+        print(f"  -  {category.title()}: {item['name']} ({item['calorie_per_100g']} kcal, {item['protein_per_100g']} g protein)")
     print(f"  →  Total:{meal['total_calorie']} kcal, {meal['total_protein']} g protein \n")
 
     conn.close()

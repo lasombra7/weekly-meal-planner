@@ -1,4 +1,4 @@
-from user_service import generate_weekly_plan_for_user, load_latest_weekly_plan
+from src.core.user_service import load_latest_weekly_plan
 
 plan = load_latest_weekly_plan(user_id=1)
 print(plan["plan_date"])

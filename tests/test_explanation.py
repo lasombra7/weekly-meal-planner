@@ -1,8 +1,8 @@
-from db_connector import connect_db
-from meal_generator import generate_weekly_meal_plan
-from explanation.daily_explainer import explain_daily_plan
-from explanation.daily_metrics import evaluate_daily_plan
-from explanation.weekly_evaluator import evaluate_weekly_plan
+from src.db.db_connector import connect_db
+from src.core.meal_generator import generate_weekly_meal_plan
+from src.explanation.daily_explainer import explain_daily_plan
+from src.explanation.daily_metrics import evaluate_daily_plan
+from src.explanation.weekly_evaluator import evaluate_weekly_plan
 
 conn = connect_db()
 weekly_plan = generate_weekly_meal_plan(conn)
