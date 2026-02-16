@@ -9,6 +9,7 @@ def generate_daily_meal_with_structure(conn, target_cal, protein_range, meal_str
     two_meal_day: Lunch 分配 40% calorie, 40% protein。 Dinner 分配 60% calorie, 60% protein。
     three_meal_day: Breakfast 分配 25% calorie, 25% protein。 Lunch 分配 35% calorie, 35% protein。 Dinner 分配 40% calorie, 40% protein。
     """
+
     if meal_structure == "two_meals":
         return generate_two_meal_day(conn, target_cal,protein_range)
     elif meal_structure == "three_meals":
@@ -28,8 +29,8 @@ assert abs(
     THREE_MEAL_DISTRIBUTION["breakfast"] + THREE_MEAL_DISTRIBUTION["lunch"] + THREE_MEAL_DISTRIBUTION["dinner"] - 1.0
 ) < 1e-6, "THREE_MEAL_DISTRIBUTION ratios must sum to 1.0"
 
-# 生成主餐
-def generate_main_meal(conn, calorie_target, protein_target, strategy=None):
+# 生成main
+def generate_main_meal(conn, calorie_target, protein_range, strategy=None):
     """
     从数据库中随机组合出一组正餐，这组正餐将由main, protein, vegetable组成,并尽量靠近设定的热量与蛋白质目标。
     返回包含type, meal_item, total_calorie, total_protein的词典
@@ -48,21 +49,24 @@ def generate_main_meal(conn, calorie_target, protein_target, strategy=None):
     vegetable = strategy.pick_vegetable(vegetables)
 
     meal = {
-        "main": main,
-        "protein": protein,
-        "vegetable": vegetable
+        "main": {**main,"grams": 100},
+        "protein": {**protein,"grams": 100},
+        "vegetable": {**vegetable,"grams": 100}
     }
 
     # 计算总热量和蛋白质
-    total_cal = sum(item["calorie_per_100g"] for item in meal.values())
-    total_protein = sum(item["protein_per_100g"] for item in meal.values())
+    total_cal = sum(item["calorie_per_100g"] * item["grams"] / 100 for item in meal.values())
+    total_protein = sum(item["protein_per_100g"] * item["grams"] / 100 for item in meal.values())
 
-    return{
+    result = {
         "type": "main_meal",
         "meal_items": meal,
         "total_calorie": round(total_cal, 1),
         "total_protein": round(total_protein, 1),
     }
+
+    result = scale_main_meal_portions(result, calorie_target, protein_range)
+    return result
 
 # 生成加餐
 def generate_snack(conn):
@@ -91,6 +95,108 @@ def generate_snack(conn):
         "total_protein": round(total_protein, 1)
     }
 
+def scale_main_meal_portions(meal,target_cal, protein_range):
+    """
+    对单顿 maim 进行分量缩放：
+    - vegetable 先固定为 200g，后续走离散档位搜索微调
+    - protein / main 走离散档位搜索，满足calorie / protein 约束后选最优
+    """
+
+    protein_lower_bound, protein_upper_bound = protein_range
+    calorie_lower_bound = target_cal * 0.8
+    calorie_upper_bound = target_cal * 1.05
+    protein_options = [50, 100, 150, 200, 250, 300]
+    main_options = [50, 100, 150, 200, 250, 300, 350, 400]
+    protein_tol_low = protein_lower_bound - 15
+    protein_tol_high = protein_lower_bound + 5
+
+    # 根据每100g营养素和实际克重计算总值
+    def calc_totals(items):
+        total_cal = 0.0
+        total_protein = 0.0
+        for v in items.values():
+            grams = float(v.get("grams", 100))
+            total_cal += float(v["calorie_per_100g"]) * grams / 100.0
+            total_protein += float(v["protein_per_100g"]) * grams / 100.0
+        return total_cal, total_protein
+
+    # 第一步：固定蔬菜200g
+    meal["meal_items"]["vegetable"]["grams"] = 200
+    best_candidate = None
+    best_score = None
+
+    # 第二步：先遍历protein，再遍历main
+    for p_g in protein_options:
+        meal["meal_items"]["protein"]["grams"] = p_g
+        for m_g in main_options:
+            meal["meal_items"]["main"]["grams"] = m_g
+            total_cal, total_protein = calc_totals(meal["meal_items"])
+            # 硬约束：不允许超过上限
+            if total_cal > calorie_upper_bound:
+                continue
+            if total_protein > protein_upper_bound:
+                continue
+
+            # 主餐必须达到calorie_lower_bound
+            if total_cal < calorie_lower_bound:
+                continue
+            # 优先接近protein_tol_low
+            if not (protein_tol_low <= total_protein <= protein_tol_high):
+                continue
+
+            # 评分规则：优先接近protein_tol_low，再热量接近target
+            protein_gap = abs(total_protein - protein_lower_bound)
+            calorie_gap = abs(total_cal - target_cal)
+            score = (protein_gap, calorie_gap)
+            if best_score is None or score < best_score:
+                best_score = score
+                best_candidate = {
+                    "main_g": m_g,
+                    "protein_g":p_g,
+                    "vegetable_g": 200,
+                    "total_cal": total_cal,
+                    "total_protein": total_protein,
+                }
+
+    # 第三步：增加一个fallback。（若找不到完全满足的组合，做一次降级选择）
+    if best_candidate is None:
+        fallback_best = None
+        fallback_score = None
+
+        for p_g in protein_options:
+            meal["meal_items"]["protein"]["grams"] = p_g
+            for m_g in main_options:
+                meal["meal_items"]["main"]["grams"] = m_g
+                total_cal, total_protein = calc_totals(meal["meal_items"])
+                if total_cal > calorie_upper_bound:
+                    continue
+                if total_protein > protein_upper_bound:
+                    continue
+                #降级时允许calorie < lower_bound，但是仍优先靠近 protein_lower, 再靠近 target_cal
+                protein_gap = abs(total_protein - protein_lower_bound)
+                calorie_gap = abs(total_cal - target_cal)
+                score = (protein_gap, calorie_gap)
+                if fallback_score is None or score < fallback_score:
+                    fallback_score = score
+                    fallback_best = {
+                        "main_g": m_g,
+                        "protein_g": p_g,
+                        "vegetable_g": 200,
+                        "total_cal": total_cal,
+                        "total_protein": total_protein,
+                    }
+
+        best_candidate = fallback_best
+
+    # 第四步： 把最优结果写回meal,并更新总宏：
+    if best_candidate is not None:
+        meal["meal_items"]["main"]["grams"] = best_candidate["main_g"]
+        meal["meal_items"]["protein"]["grams"] = best_candidate["protein_g"]
+        meal["meal_items"]["vegetable"]["grams"] = best_candidate["vegetable_g"]
+        meal["total_calorie"] = round(best_candidate["total_cal"], 1)
+        meal["total_protein"] = round(best_candidate["total_protein"], 1)
+    return meal
+
 # 生成两餐制每日食谱（两餐+可选加餐）
 def generate_two_meal_day(conn,
                         target_cal = 1700,
@@ -101,17 +207,25 @@ def generate_two_meal_day(conn,
         - 若总日热量低于target_cal，自动添加snack（fruit + dairy）
     """
 
-    cal_lower_bound = target_cal - 100
-    cal_upper_bound = target_cal + 100
+    cal_lower_bound = target_cal * 0.8
+    cal_upper_bound = target_cal * 1.05
     protein_lower_bound, protein_upper_bound = protein_range
 
     lunch_ratio = TWO_MEAL_DISTRIBUTION["lunch"]
     dinner_ratio = TWO_MEAL_DISTRIBUTION["dinner"]
 
     # 生成两顿主餐(Lunch + Dinner)
-    for _ in range(50):
-        meal_lunch = generate_main_meal(conn, target_cal * lunch_ratio, protein_lower_bound * lunch_ratio)
-        meal_dinner = generate_main_meal(conn, target_cal * dinner_ratio, protein_lower_bound * dinner_ratio)
+    for _ in range(10):
+        meal_lunch = generate_main_meal(
+            conn,
+            target_cal * lunch_ratio,
+            (protein_lower_bound * lunch_ratio, protein_upper_bound * lunch_ratio)
+        )
+        meal_dinner = generate_main_meal(
+            conn,
+            target_cal * dinner_ratio,
+            (protein_lower_bound * dinner_ratio, protein_upper_bound * dinner_ratio)
+        )
 
         total_main_cal = meal_lunch["total_calorie"] + meal_dinner["total_calorie"]
         total_main_protein = meal_lunch["total_protein"] + meal_dinner["total_protein"]
@@ -125,7 +239,7 @@ def generate_two_meal_day(conn,
     snack_allowed = False
 
     #若主餐热量不足目标值（现1700），则生成snack
-    if total_main_cal < target_cal:
+    if total_main_cal < target_cal * 0.9:
         if ((total_main_cal + snack["total_calorie"]) <= cal_upper_bound
             and (total_main_protein + snack["total_protein"]) <= protein_upper_bound):
             snack_allowed = True
@@ -174,10 +288,22 @@ def generate_three_meal_day(conn,target_cal, protein_range):
     dinner_ratio = THREE_MEAL_DISTRIBUTION["dinner"]
 
     # 生成三顿主餐(Breakfast + Lunch + Dinner)
-    for _ in range(50):
-        meal_breakfast = generate_main_meal(conn, target_cal * breakfast_ratio, protein_lower_bound * breakfast_ratio)
-        meal_lunch = generate_main_meal(conn, target_cal * lunch_ratio, protein_lower_bound * lunch_ratio)
-        meal_dinner = generate_main_meal(conn, target_cal * dinner_ratio, protein_lower_bound * dinner_ratio)
+    for _ in range(10):
+        meal_breakfast = generate_main_meal(
+            conn,
+            target_cal * breakfast_ratio,
+            (protein_lower_bound * breakfast_ratio, protein_upper_bound * breakfast_ratio)
+        )
+        meal_lunch = generate_main_meal(
+        conn,
+        target_cal * lunch_ratio,
+        (protein_lower_bound * lunch_ratio, protein_upper_bound * lunch_ratio)
+        )
+        meal_dinner = generate_main_meal(
+            conn,
+            target_cal * dinner_ratio,
+            (protein_lower_bound * dinner_ratio, protein_upper_bound * dinner_ratio)
+        )
 
         total_main_cal = meal_breakfast["total_calorie"] + meal_lunch["total_calorie"] + meal_dinner["total_calorie"]
         total_main_protein = meal_breakfast["total_protein"] + meal_lunch["total_protein"] + meal_dinner["total_protein"]
@@ -191,7 +317,7 @@ def generate_three_meal_day(conn,target_cal, protein_range):
     snack_allowed = False
 
     # 若主餐热量不足目标值（现1700），则生成snack
-    if total_main_cal < target_cal:
+    if total_main_cal < target_cal * 0.9:
         if ((total_main_cal + snack["total_calorie"]) <= cal_upper_bound
                 and (total_main_protein + snack["total_protein"]) <= protein_upper_bound):
             snack_allowed = True
@@ -261,12 +387,7 @@ if __name__ == "__main__":
 
     # ===== 现测试Greedy Strategy =====
     print("\n=== Greedy Strategy Test ===")
-    meal = generate_main_meal(
-        conn,
-        calorie_target=850,
-        protein_target=70,
-        strategy=get_strategy("greedy")
-    )
+    meal = generate_main_meal(conn, calorie_target=850, protein_range=(60,75), strategy=get_strategy("greedy"))
 
     for category, item in meal["meal_items"].items():
         print(f"  -  {category.title()}: {item['name']} ({item['calorie_per_100g']} kcal, {item['protein_per_100g']} g protein)")
@@ -274,12 +395,7 @@ if __name__ == "__main__":
 
     # ===== 现测试Weighted Strategy =====
     print("=== Weighted Strategy Test ===")
-    meal = generate_main_meal(
-        conn,
-        calorie_target=850,
-        protein_target=70,
-        strategy=get_strategy("weighted")
-    )
+    meal = generate_main_meal(conn, calorie_target=850, protein_range=(60,75), strategy=get_strategy("weighted"))
 
     for category, item in meal["meal_items"].items():
         print(f"  -  {category.title()}: {item['name']} ({item['calorie_per_100g']} kcal, {item['protein_per_100g']} g protein)")

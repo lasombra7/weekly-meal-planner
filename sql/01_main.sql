@@ -29,24 +29,20 @@ VALUES
 -- Whole Grains
 ('M4', 'Quinoa (Cooked)', 'Whole Grain', 'Quinoa', 120, 4.4, 21.0, 1.9),
 ('M5', 'Oats (Cooked)', 'Whole Grain', 'Oats', 71, 2.5, 12.0, 1.5),
-('M6', 'Barley (Cooked)', 'Whole Grain', 'Barley', 123, 2.3, 28.0, 0.4),
-('M7', 'Buckwheat (Cooked)', 'Whole Grain', 'Buckwheat', 92, 3.4, 20.0, 0.6),
+('M6', 'Whole Wheat Bread', 'Whole Grain', 'Bread', 247, 13.0, 41.0, 4.2),
+('M7', 'White Bread', 'Whole Grain', 'Bread', 265, 9.0, 49.0, 3.2),
 ('M8', 'Millet (Cooked)', 'Whole Grain', 'Millet', 119, 3.5, 23.0, 1.0),
-('M9', 'Farro (Cooked)', 'Whole Grain', 'Farro', 125, 5.0, 25.0, 1.0),
 
 -- Legumes
-('M10', 'Lentils (Cooked)', 'Legume', 'Lentils', 116, 9.0, 20.0, 0.4),
-('M11', 'Chickpeas (Cooked)', 'Legume', 'Chickpeas', 164, 8.9, 27.0, 2.6),
-('M12', 'Red Beans (Cooked)', 'Legume', 'Red Beans', 127, 8.7, 22.8, 0.5),
+('M9', 'Lentils (Cooked)', 'Legume', 'Lentils', 116, 9.0, 20.0, 0.4),
+('M10', 'Chickpeas (Cooked)', 'Legume', 'Chickpeas', 164, 8.9, 27.0, 2.6),
 
 -- Tubers
-('M13', 'Potato (Boiled)', 'Tuber', 'Potato', 87, 2.0, 20.0, 0.1),
-('M14', 'Sweet Potato (Boiled)', 'Tuber', 'Sweet Potato', 90, 2.0, 21.0, 0.1),
-('M15', 'Taro (Boiled)', 'Tuber', 'Taro', 112, 1.5, 26.0, 0.2),
+('M11', 'Potato (Boiled)', 'Tuber', 'Potato', 87, 2.0, 20.0, 0.1),
+('M12', 'Sweet Potato (Boiled)', 'Tuber', 'Sweet Potato', 90, 2.0, 21.0, 0.1),
 
 -- Pasta
-('M16', 'Whole Wheat Pasta (Cooked)', 'Pasta', 'Whole Wheat Pasta', 124, 5.0, 25.0, 1.1),
-('M17', 'White Pasta (Cooked)', 'Pasta', 'White Pasta', 131, 5.0, 25.0, 1.1),
+('M13', 'White Pasta (Cooked)', 'Pasta', 'White Pasta', 131, 5.0, 25.0, 1.1),
 
 -- Noodle
-('M18', 'Udon (Cooked)', 'Noodles', 'Udon', 127, 3.0, 25.0, 0.3);
+('M14', 'Udon (Cooked)', 'Noodles', 'Udon', 127, 3.0, 25.0, 0.3);
