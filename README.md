@@ -222,9 +222,9 @@ Evolve the project into a **reproducible experimental system** suitable for long
 - Prepare the system for future optimization and feedback layers
 
 **Completed Tasks**
-- [ ] Implemented discrete portion scaling for main meals
-- [ ] Introduce calorie and protein lower/upper bound constraints
-- [ ] Implement fallback search when strict constraints fail
+- [x] Implemented discrete portion scaling for main meals
+- [x] Introduce calorie and protein lower/upper bound constraints
+- [x] Implement fallback search when strict constraints fail
 
 **Inompleted Tasks**
 - [ ] Apply discrete portion scaling to snack generation
