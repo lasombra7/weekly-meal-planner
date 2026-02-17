@@ -1,4 +1,4 @@
-from src.db.db_connector import connect_db, get_foods
+from src.db.db_connector import get_foods
 from src.strategies.registry import get_strategy
 import random
 
@@ -124,6 +124,8 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
     meal["meal_items"]["vegetable"]["grams"] = 200
     best_candidate = None
     best_score = None
+    protein_weight = 4
+    calorie_weight = 1
 
     # 第二步：先遍历protein，再遍历main
     for p_g in protein_options:
@@ -147,7 +149,7 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
             # 评分规则：优先接近protein_tol_low，再热量接近target
             protein_gap = abs(total_protein - protein_lower_bound)
             calorie_gap = abs(total_cal - target_cal)
-            score = (protein_gap, calorie_gap)
+            score = protein_weight * protein_gap + calorie_weight * calorie_gap
             if best_score is None or score < best_score:
                 best_score = score
                 best_candidate = {
@@ -162,6 +164,8 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
     if best_candidate is None:
         fallback_best = None
         fallback_score = None
+        protein_weight = 4
+        calorie_weight = 1
 
         for p_g in protein_options:
             meal["meal_items"]["protein"]["grams"] = p_g
@@ -175,7 +179,7 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
                 #降级时允许calorie < lower_bound，但是仍优先靠近 protein_lower, 再靠近 target_cal
                 protein_gap = abs(total_protein - protein_lower_bound)
                 calorie_gap = abs(total_cal - target_cal)
-                score = (protein_gap, calorie_gap)
+                score = protein_weight * protein_gap + calorie_weight * calorie_gap
                 if fallback_score is None or score < fallback_score:
                     fallback_score = score
                     fallback_best = {
@@ -358,47 +362,3 @@ def generate_weekly_meal_plan(conn, target_cal=1700, protein_range=(130,150), me
         daily_plan = generate_daily_meal_with_structure(conn, target_cal=target_cal, protein_range=protein_range, meal_structure=meal_structure)
         weekly_plan.append({"day": day, **daily_plan})
     return weekly_plan
-
-#方便测试时候整洁，后期可删除
-if __name__ == "__main__":
-    conn = connect_db()
-    # ===== 原 Weekly 逻辑 =====
-    print("=== Weekly Plan (Default: Random Strategy) ===")
-    weekly_plan = generate_weekly_meal_plan(conn, meal_structure="three_meals")
-    for day in weekly_plan:
-        print(f"Day {day['day']} - {day['total_calorie']} kcal / {day['total_protein']} g protein |")
-        print(f"Snack allowed: {day['snack_allowed']}")
-        print("-" * 60)
-
-        # 打印每顿主餐详情
-        for meal in day["meals"]:
-            print(f"{meal['type'].title()}:")
-            for category, item in meal["meal_items"].items():
-                print(f"  -  {category.title()}:{item['name']} ({item['calorie_per_100g']} kcal, {item['protein_per_100g']} g protein)")
-            print(f"  →  Total:{meal['total_calorie']} kcal, {meal['total_protein']} g protein \n")
-
-        # 如果有snack，打印snack详情
-        snack = day["snack_option"]
-        print(f"Snack option({'Allowed' if day['snack_allowed'] else 'Optional only'}):")
-        for category, item in snack["items"].items():
-            print(f"  -  {category.title()}: {item['name']} ({item['calorie_per_100g']} kcal, {item['protein_per_100g']} g protein)")
-        print(f"  →  Total:{snack['total_calorie']} kcal, {snack['total_protein']} g protein")
-        print("=" * 60)
-
-    # ===== 现测试Greedy Strategy =====
-    print("\n=== Greedy Strategy Test ===")
-    meal = generate_main_meal(conn, calorie_target=850, protein_range=(60,75), strategy=get_strategy("greedy"))
-
-    for category, item in meal["meal_items"].items():
-        print(f"  -  {category.title()}: {item['name']} ({item['calorie_per_100g']} kcal, {item['protein_per_100g']} g protein)")
-    print(f"  →  Total:{meal['total_calorie']} kcal, {meal['total_protein']} g protein \n")
-
-    # ===== 现测试Weighted Strategy =====
-    print("=== Weighted Strategy Test ===")
-    meal = generate_main_meal(conn, calorie_target=850, protein_range=(60,75), strategy=get_strategy("weighted"))
-
-    for category, item in meal["meal_items"].items():
-        print(f"  -  {category.title()}: {item['name']} ({item['calorie_per_100g']} kcal, {item['protein_per_100g']} g protein)")
-    print(f"  →  Total:{meal['total_calorie']} kcal, {meal['total_protein']} g protein \n")
-
-    conn.close()
