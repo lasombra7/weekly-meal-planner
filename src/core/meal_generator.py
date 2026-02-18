@@ -90,7 +90,7 @@ def generate_snack(conn):
 
     return {
         "type": "snack",
-        "items": snack,
+        "snack_items": snack,
         "total_calorie": round(total_cal, 1),
         "total_protein": round(total_protein, 1)
     }
@@ -120,20 +120,21 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
             total_protein += float(v["protein_per_100g"]) * grams / 100.0
         return total_cal, total_protein
 
-    # 第一步：固定蔬菜200g
+    # 固定蔬菜200g
     meal["meal_items"]["vegetable"]["grams"] = 200
     best_candidate = None
     best_score = None
-    protein_weight = 4
+    # 权重：蛋白优先
+    protein_weight = 3
     calorie_weight = 1
 
-    # 第二步：先遍历protein，再遍历main
+    # 先遍历protein，再遍历main
     for p_g in protein_options:
         meal["meal_items"]["protein"]["grams"] = p_g
         for m_g in main_options:
             meal["meal_items"]["main"]["grams"] = m_g
             total_cal, total_protein = calc_totals(meal["meal_items"])
-            # 硬约束：不允许超过上限
+            # 硬约束：不允许超过 calorie & protein upper bound
             if total_cal > calorie_upper_bound:
                 continue
             if total_protein > protein_upper_bound:
@@ -160,7 +161,7 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
                     "total_protein": total_protein,
                 }
 
-    # 第三步：增加一个fallback。（若找不到完全满足的组合，做一次降级选择）
+    # 增加一个fallback。（若找不到完全满足的组合，做一次降级选择）
     if best_candidate is None:
         fallback_best = None
         fallback_score = None
@@ -192,7 +193,7 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
 
         best_candidate = fallback_best
 
-    # 第四步： 把最优结果写回meal,并更新总宏：
+    # 把最优结果写回meal,并更新总宏
     if best_candidate is not None:
         meal["meal_items"]["main"]["grams"] = best_candidate["main_g"]
         meal["meal_items"]["protein"]["grams"] = best_candidate["protein_g"]
@@ -200,6 +201,93 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
         meal["total_calorie"] = round(best_candidate["total_cal"], 1)
         meal["total_protein"] = round(best_candidate["total_protein"], 1)
     return meal
+
+def scale_snack_portions(snack, total_main_cal, total_main_protein, target_cal, protein_range):
+    """
+    对snack 进行分量优化：
+    - 补足 calorie / protein deficit
+    - 不允许超过 calorie_upper_bound / protein_upper_bound
+    - 如果 calorie 偏低则 fruit 优先走离散档位搜索，小分量 dairy 作为补充
+    - 如果 protein 偏低则 dairy 优先走离散档位搜搜，小分量 fruit 作为补充
+    """
+
+    protein_lower_bound, protein_upper_bound = protein_range
+    calorie_upper_bound = target_cal * 1.05
+    fruit_options = [50, 100, 150, 200]
+    dairy_options = [50, 100, 150, 200]
+    calorie_deficit = target_cal - total_main_cal
+    protein_deficit = protein_lower_bound - total_main_protein
+
+    # 根据每100g营养素和实际克重计算总值
+    def calc_snack_totals(items):
+        total_cal = 0.0
+        total_protein = 0.0
+        for v in items.values():
+            grams = float(v.get("grams", 100))
+            total_cal += float(v["calorie_per_100g"]) * grams / 100.0
+            total_protein += float(v["protein_per_100g"]) * grams / 100.0
+        return total_cal, total_protein
+
+    best_candidate = None
+    best_score = None
+    fallback_candidate = None
+    fallback_score = None
+    # 权重：蛋白优先
+    protein_weight = 3
+    calorie_weight = 1
+
+    # 先遍历 fruit ，再遍历 main
+    for f_g in fruit_options:
+        snack["snack_items"]["fruit"]["grams"] = f_g
+        for d_g in dairy_options:
+            snack["snack_items"]["dairy"]["grams"] = d_g
+            snack_cal, snack_protein = calc_snack_totals(snack["snack_items"])
+            snack_allowed_total_cal = total_main_cal + snack_cal
+            snack_allowed_total_protein = total_main_protein + snack_protein
+            # 硬约束：不允许超过 calorie & protein upper bound
+            if snack_allowed_total_cal > calorie_upper_bound:
+                continue
+            if snack_allowed_total_protein > protein_upper_bound:
+                continue
+
+            # 评分
+            protein_gap = abs(snack_allowed_total_protein - protein_lower_bound)
+            calorie_gap = abs(snack_allowed_total_cal - target_cal)
+            # 偏向补偿逻辑
+            if protein_deficit > 0:
+                # protein 不足的时候优先靠近 protein
+                score = protein_weight * protein_gap + calorie_weight * calorie_gap
+            else:
+                # protein 足够的时候优先补充 calorie
+                score = calorie_weight * calorie_gap + 0.5 * protein_gap
+            if best_score is None or score < best_score:
+                best_score = score
+                best_candidate = {
+                    "fruit_g": f_g,
+                    "dairy_g": d_g,
+                    "total_cal": snack_allowed_total_cal,
+                    "total_protein": snack_allowed_total_protein,
+                }
+            # 增加一个fallback。（若找不到完全满足的组合，做一次降级选择）
+            fallback_score_temp = protein_gap + calorie_gap
+            if fallback_score is None or fallback_score_temp < fallback_score:
+                fallback_score = fallback_score_temp
+                fallback_candidate = {
+                "fruit_g": f_g,
+                "dairy_g": d_g,
+                "total_cal": snack_allowed_total_cal,
+                "total_protein": snack_allowed_total_protein,
+                }
+
+    # 把最优结果写回meal,并更新总宏
+    if best_candidate is None:
+        best_candidate = fallback_candidate
+    if best_candidate is not None:
+        snack["snack_items"]["fruit"]["grams"] = best_candidate["fruit_g"]
+        snack["snack_items"]["dairy"]["grams"] = best_candidate["dairy_g"]
+        snack["total_calorie"] = round(best_candidate["total_cal"] - total_main_cal, 1)
+        snack["total_protein"] = round(best_candidate["total_protein"] - total_main_protein, 1)
+    return snack
 
 # 生成两餐制每日食谱（两餐+可选加餐）
 def generate_two_meal_day(conn,
@@ -240,6 +328,7 @@ def generate_two_meal_day(conn,
 
     # 生成snack
     snack = generate_snack(conn)
+    snack = scale_snack_portions(snack, total_main_cal, total_main_protein, target_cal, protein_range)
     snack_allowed = False
 
     #若主餐热量不足目标值（现1700），则生成snack
@@ -283,8 +372,8 @@ def generate_three_meal_day(conn,target_cal, protein_range):
         - 若总日热量低于target_cal，自动添加snack（fruit + dairy）
     """
 
-    cal_lower_bound = target_cal - 100
-    cal_upper_bound = target_cal + 100
+    cal_lower_bound = target_cal * 0.8
+    cal_upper_bound = target_cal * 1.05
     protein_lower_bound, protein_upper_bound = protein_range
 
     breakfast_ratio = THREE_MEAL_DISTRIBUTION["breakfast"]
@@ -318,6 +407,7 @@ def generate_three_meal_day(conn,target_cal, protein_range):
 
     # 生成snack
     snack = generate_snack(conn)
+    snack = scale_snack_portions(snack, total_main_cal, total_main_protein, target_cal, protein_range)
     snack_allowed = False
 
     # 若主餐热量不足目标值（现1700），则生成snack
