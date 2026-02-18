@@ -225,10 +225,10 @@ Evolve the project into a **reproducible experimental system** suitable for long
 - [x] Implemented discrete portion scaling for main meals
 - [x] Introduce calorie and protein lower/upper bound constraints
 - [x] Implement fallback search when strict constraints fail
+- [x] Apply discrete portion scaling to snack generation
+- [x] Fine-tune scoring weights (protein vs calorie priority)
 
 **Inompleted Tasks**
-- [ ] Apply discrete portion scaling to snack generation
-- [ ] Fine-tune scoring weights (protein vs calorie priority)
 - [ ] Improve global daily optimization beyond per-meal scaling
 - [ ] Add explainable signals for portion decisions
 - [ ] Introduce configurable tolerance ratios (0.8 / 1.05 etc.)
