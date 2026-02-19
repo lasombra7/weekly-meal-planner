@@ -13,25 +13,23 @@ def connect_db():
     )
     return conn
 
-#获取任意表的所有食材
-def get_foods(table_name):
-    conn = connect_db()
+# 获取任意表的所有食材
+def get_foods(table_name, conn):
     cursor = conn.cursor(dictionary=True)
-    cursor.execute(f"select * from {table_name}")
-    result =  cursor.fetchall()
+    cursor.execute(f"SELECT * FROM {table_name}")
+    result = cursor.fetchall()
     cursor.close()
-    conn.close()
     return result
 
-#随机选择出一顿饭（用于测试）
-def get_random_meal():
+# 随机选择出一顿饭（用于测试）
+def get_random_meal(conn):
     meal = {
-        "main": random.choice(get_foods("main")),
-        "protein": random.choice(get_foods("protein")),
-        "vegetable":random.choice(get_foods("vegetable")),
-        "fruit": random.choice(get_foods("fruit")),
-        "oil":random.choice(get_foods("oil")),
-        "dairy":random.choice(get_foods("dairy"))
+        "main": random.choice(get_foods("main", conn)),
+        "protein": random.choice(get_foods("protein", conn)),
+        "vegetable": random.choice(get_foods("vegetable", conn)),
+        "fruit": random.choice(get_foods("fruit", conn)),
+        "oil": random.choice(get_foods("oil", conn)),
+        "dairy": random.choice(get_foods("dairy", conn))
     }
 
     #计算总热量和蛋白质
@@ -48,8 +46,7 @@ def get_random_meal():
     return meal
 
 # 从 user_profile 表中加载用户信息
-def load_user_profile(user_id):
-    conn = connect_db()
+def load_user_profile(user_id, conn):
     cursor = conn.cursor(dictionary=True)
     cursor.execute(
         "SELECT * FROM user_profile WHERE user_id = %s",
@@ -57,7 +54,6 @@ def load_user_profile(user_id):
     )
     profile = cursor.fetchone()
     cursor.close()
-    conn.close()
 
     if profile is None:
         raise ValueError(f"user_profile not found for user_id={user_id}")
@@ -65,6 +61,10 @@ def load_user_profile(user_id):
     return profile
 
 
-#模块测试入口
+# 模块测试入口
 if __name__ == "__main__":
-    get_random_meal()
+    conn = connect_db()
+    try:
+        get_random_meal(conn)
+    finally:
+        conn.close()
