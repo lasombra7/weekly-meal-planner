@@ -215,24 +215,23 @@ Make meal plan generation **transparent, interpretable, and measurable**.
 Evolve the project into a **reproducible experimental system** suitable for long-term research and extension.
 
 **Design Focus:**
-- Replace brute-force random retries with structured discrete search
+- Replace brute-force random retries with partial structured discrete search
 - Close the loop between generated plans and real user outcomes
 - Improve experiment reproducibility and configuration control
 - Strengthen system modularity and usability
 - Prepare the system for future optimization and feedback layers
 
 **Completed Tasks**
-- [x] Implemented discrete portion scaling for main meals
-- [x] Introduce calorie and protein lower/upper bound constraints
-- [x] Implement fallback search when strict constraints fail
-- [x] Apply discrete portion scaling to snack generation
-- [x] Fine-tune scoring weights (protein vs calorie priority)
+- [x] Implement meal-level discrete constrained optimization
+- [x] Introduce hard macro constraints (calorie / protein bounds)
+- [x] Add weighted multi-objective scoring (protein vs calorie)
+- [x] Implement fallback search mechanism
+- [x] Apply discrete scaling to snack generation
+- [x] Introduce configurable tolerance ratios (0.8 / 1.05)
 
 **Inompleted Tasks**
-- [ ] Improve global daily optimization beyond per-meal scaling
 - [ ] Add explainable signals for portion decisions
-- [ ] Introduce configurable tolerance ratios (0.8 / 1.05 etc.)
-- [ ] Optimize performance of discrete search space
+
 
 ---
 
