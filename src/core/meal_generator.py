@@ -101,6 +101,7 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
     - vegetable 先固定为 200g
     - protein / main 走离散档位搜索，
     - 优先满足硬约束，若失败则fallback
+    - 增加 decision_trace 用于解释 protein 决策
     """
 
     protein_lower_bound, protein_upper_bound = protein_range
@@ -152,11 +153,19 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
                 if best_score is None or score < best_score:
                     best_score = score
                     best_candidate = {
+                        # 用于输出菜单
                         "main_g": m_g,
                         "protein_g":p_g,
                         "vegetable_g": 200,
                         "total_cal": total_cal,
                         "total_protein": total_protein,
+
+                        # 用于生成解释
+                        "protein_gap": protein_gap,
+                        "calorie_gap": calorie_gap,
+                        "strict_mode": strict_mode,
+                        "protein_weight": protein_weight,
+                        "calorie_weight": calorie_weight,
                     }
         return best_candidate
 
@@ -168,11 +177,21 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
 
     # 把最优结果写回meal,并更新总宏
     if best_candidate is not None:
+        # 用于输出菜单
         meal["meal_items"]["main"]["grams"] = best_candidate["main_g"]
         meal["meal_items"]["protein"]["grams"] = best_candidate["protein_g"]
         meal["meal_items"]["vegetable"]["grams"] = best_candidate["vegetable_g"]
         meal["total_calorie"] = round(best_candidate["total_cal"], 1)
         meal["total_protein"] = round(best_candidate["total_protein"], 1)
+
+        # 用于生成解释
+        meal["decision_trace"] = {
+            "strict_mode_used": best_candidate["strict_mode"],
+            "protein_weight": best_candidate["protein_weight"],
+            "calorie_weight": best_candidate["calorie_weight"],
+            "final_protein_gap": round(best_candidate["protein_gap"], 2),
+            "final_calorie_gap": round(best_candidate["calorie_gap"], 2),
+        }
     return meal
 
 def scale_snack_portions(snack, total_main_cal, total_main_protein, target_cal, protein_range):
