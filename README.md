@@ -5,20 +5,19 @@ This project integrates structured nutrition data with constraint-based planning
 
 ---
 
-## Features (Current Phase)
+## 🚀 v1.0 Features
 
+- Search-based portion scaling
+- Multi-objective macro scoring
+- Strict constraint + fallback mechanism
+- Decision trace for explainable optimization
 - Generates a full **7-day meal plan**
 - Supports **2-meal or 3-meal daily structures**
-- Each day consists of:
-  - Main meals (lunch / dinner or breakfast / lunch / dinner)
-  - Optional snack (fruit + dairy)
-- Ensures each day meets **calorie and protein targets**
-- Applies strict **lower-bound + upper-bound** constraint logic
 - Automatically determines whether a snack can be added
-- Flexible food database (main, protein, vegetable, fruit, oil, dairy)
 - Strategy-based food selection framework
 - Persistent weekly plan storage for registered users
 - Visitor (guest) mode without persistence
+- Weekly evaluation support
 
 ---
 
@@ -179,7 +178,7 @@ Introduce **flexible daily meal structures** while preserving existing nutrition
 - [x] Introduced `meal_structure` as an explicit planning parameter  
 - [x] Refactored legacy daily generation into `generate_two_meal_day()`  
 - [x] Defined clear per-meal calorie & protein distributions:
-  - 2-meal structure: Lunch (40%), Dinner (60%)
+  - 2-meal structure: Lunch (45%), Dinner (55%)
   - 3-meal structure: Breakfast (25%), Lunch (35%), Dinner (40%)
 - [x] Centralized meal structure routing via `generate_daily_meal_with_structure()`  
 - [x] Preserved calorie & protein validation logic across meal structures  
@@ -209,7 +208,7 @@ Make meal plan generation **transparent, interpretable, and measurable**.
 
 ---
 
-### Phase 6: Feedback Loop, Reproducibility & System Polish *(In Progress)*
+### Phase 6: Feedback Loop, Reproducibility & System Polish ✅ *(v1.0 Release)*
 
 **Goal:**  
 Evolve the project into a **reproducible experimental system** suitable for long-term research and extension.
@@ -228,10 +227,7 @@ Evolve the project into a **reproducible experimental system** suitable for long
 - [x] Implement fallback search mechanism
 - [x] Apply discrete scaling to snack generation
 - [x] Introduce configurable tolerance ratios (0.8 / 1.05)
-
-**Inompleted Tasks**
-- [ ] Add explainable signals for portion decisions
-
+- [x] Add explainable signals for portion decisions
 
 ---
 
