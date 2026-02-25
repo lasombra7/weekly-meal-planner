@@ -1,8 +1,37 @@
 # Weekly Meal Planner
 
-A Python + MySQL system that automatically generates balanced weekly meal plans based on calorie and protein goals.
-This project integrates structured nutrition data with constraint-based planning, strategy-driven selection, and user modeling to produce realistic and extensible meal schedules.
+A modular, constraint-based nutritition planning system built with *python* and *MySQL*
+The system integrates user modeling, strategy-driven selection, discrete portion scaling, and explainable macro validation to generate reproducible weekly meal plans.
 
+---
+
+## Project Motivation
+Nutrition planning is often heuristic-driven and lacks transparency in decision logic.
+
+This project was designed to explore:
+- Structured constraint-based planning under nutritional bounds
+- Modular system design for experimentation
+- Reproducible decision pipelines
+- Explainable portion scaling logic
+
+Rather than building a simple meal generator, the goal was to construct a layered planning system capable of evolving into a macro-aware optimization framework.
+
+---
+
+## Design Philosophy
+
+The system is built on five guiding principles:
+1. Separation of Concerns
+   User modeling, strategy selection, constraint validation, and persistence are decoupled.
+2. Deterministic Constraints over Randomness
+   Random selection is constrained by hard macro bounds and fallback search mechanisms.
+3. Explainability over Black-Box Decisions  
+   Each meal decision exposes evaluation signals and macro-level reasoning.
+4. Reproducibility  
+   Weekly plans are stored as versioned snapshots with macro summaries.
+5. Extensibility  
+   The architecture allows future integration of optimization solvers and feedback loops without restructuring core logic.
+   
 ---
 
 ## 🚀 v1.0 Features
@@ -26,11 +55,11 @@ This project integrates structured nutrition data with constraint-based planning
 The system is structured as a layered planning pipeline:
 
 User / Visitor Input  
-→ Target Calculation (calorie & protein)  
-→ Meal Structure Selection (2-meal / 3-meal)  
-→ Strategy-Based Food Selection  
-→ Constraint-Based Meal Generation  
-→ Weekly Plan Persistence (User Mode)
+- Target Calculation (calorie & protein)  
+- Meal Structure Selection (2-meal / 3-meal)  
+- Strategy-Based Food Selection  
+- Constraint-Based Meal Generation  
+- Weekly Plan Persistence (User Mode)
 
 This separation allows independent experimentation with:
 - user modeling
@@ -40,6 +69,19 @@ This separation allows independent experimentation with:
 
 ---
 
+## Algorithmic Flow
+
+For each day:
+1. Compute macro targets (calorie / protein)
+2. Allocate per-meal macro distribution
+3. Select food items via strategy abstraction
+4. Apply discrete portion scaling
+5. Validate against macro constraints
+6. Apply fallback search if needed
+7. Evaluate daily metrics
+8. Store snapshot
+
+---
 ## Technical Design
 
 **Language:** Python  
@@ -189,6 +231,22 @@ Introduce **flexible daily meal structures** while preserving existing nutrition
 
 ---
 
+## Evaluation & Stability
+
+The system evaluates:
+- Calorie deviation
+- Protein deviation
+- Constraint tightness ratio
+- Snack feasibility decision
+- Weekly macro stability
+
+This allows:
+- Experimental comparison across strategies
+- Macro tolerance tuning
+- Planning reproducibility analysis
+
+---
+
 ### Phase 5: Explainable Planning & Evaluation ✅ *(Completed)*
 
 **Goal:**  
@@ -269,6 +327,16 @@ This project serves as a foundation for future research and system expansion in:
 - Macro-aware database schema
 - Version-controlled plan storage
 - Research-ready experimental framework
+
+## Research-Oriented Extensions
+
+This system can evolve toward:
+- Linear Programming (LP-based macro balancing)
+- Multi-objective optimization (macro + diversity + cost)
+- Preference learning via user interaction feedback
+- Reinforcement learning for adaptive meal scheduling
+- Longitudinal nutrition pattern analysis
+
 ---
 
 ## Summary
