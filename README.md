@@ -52,11 +52,10 @@ The system is built on five guiding principles:
 
 ## System Architecture
 
-```
 User Input
    │
    ▼
-Target Calculator
+Target Calculation
    │
    ▼
 Meal Structure Selection
@@ -65,7 +64,7 @@ Meal Structure Selection
 Strategy-Based Food Selection
    │
    ▼
-Meal Generator
+Daily Meal Generation
    │
    ▼
 Explanation Layer
@@ -75,7 +74,6 @@ Weekly Evaluation
    │
    ▼
 Database Persistence (MySQL)
-```
 
 ---
 
@@ -105,6 +103,39 @@ Run the demo:
 python run_demo.py
 ```
 
+---
+
+## Example Output
+
+```text
+Weekly Meal Planner Demo (Visitor Mode)
+
+User Profile
+  Height: 180 cm
+  Weight: 75 kg
+  Age: 28
+  Sex: male
+  Activity Level: moderate
+  Goal: maintain
+  Meal Structure: two_meals
+
+Targets
+  Calorie Target: 2697 kcal
+  Protein Range: 120 - 150 g
+  Strategy: random
+
+Day 1
+----------------------------------------
+  Main Meal 1
+    - Main: White Bread (350g, 265 kcal/100g, 9 g protein/100g)
+    - Protein: Cottage Cheese (250g, 98 kcal/100g, 11 g protein/100g)
+    - Vegetable: Bok Choy (200g)
+
+Weekly Metrics
+Average Calorie Deviation: -271.3
+Protein Failure Days: 0
+Snack Usage Rate: 0.29
+```
 ---
 
 ## System Architecture Overview
@@ -348,7 +379,8 @@ Evolve the project into a **reproducible experimental system** suitable for long
 
 ## Long-Term Vision
 
-This project serves as a foundation for future research and system expansion in:
+This project serves as a foundation for future research in computational nutrition planning and personalized health systems.
+The current rule-based planner can be extended toward optimization, learning-based recommendation, and explainable decision systems.
 
 ### 1. Macro-Aware Nutritional Planning
 - Multi-macro tracking (calorie, protein, carbohydrate, fat)
