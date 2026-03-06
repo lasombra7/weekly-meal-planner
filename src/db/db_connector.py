@@ -3,6 +3,7 @@ import random
 
 
 # 连接mysql数据库
+# Connect to the MySQL database
 def connect_db():
     conn = mysql.connector.connect(
         host="localhost",
@@ -14,6 +15,7 @@ def connect_db():
     return conn
 
 # 获取任意表的所有食材
+# Get all the items in tables
 def get_foods(table_name, conn):
     cursor = conn.cursor(dictionary=True)
     cursor.execute(f"SELECT * FROM {table_name}")
@@ -22,6 +24,7 @@ def get_foods(table_name, conn):
     return result
 
 # 随机选择出一顿饭（用于测试）
+# Randomly select a meal (for testing)
 def get_random_meal(conn):
     meal = {
         "main": random.choice(get_foods("main", conn)),
@@ -32,11 +35,13 @@ def get_random_meal(conn):
         "dairy": random.choice(get_foods("dairy", conn))
     }
 
-    #计算总热量和蛋白质
+    # 计算总热量和蛋白质
+    # Calculate the total calories and protein
     total_calorie = sum(item["calorie_per_100g"] for item in meal.values())
     total_protein = sum(item["protein_per_100g"] for item in meal.values())
 
-    #输出推荐部分
+    # 输出推荐部分
+    # Output the recommended section
     print("\n Today's Menu Recommendations：")
     for category, item in meal.items():
         print(f"{category.capitalize():<10} : {item['name']} ({item['calorie_per_100g']}kcal, {item['protein_per_100g']}g protein)")
@@ -46,6 +51,7 @@ def get_random_meal(conn):
     return meal
 
 # 从 user_profile 表中加载用户信息
+# Load user information from the user_profile table
 def load_user_profile(user_id, conn):
     cursor = conn.cursor(dictionary=True)
     cursor.execute(
@@ -62,6 +68,7 @@ def load_user_profile(user_id, conn):
 
 
 # 模块测试入口
+# Module test entry
 if __name__ == "__main__":
     conn = connect_db()
     try:

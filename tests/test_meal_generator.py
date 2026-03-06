@@ -22,7 +22,8 @@ def print_main_meal(meal):
 
     print(f"  →  Total:{meal['total_calorie']} kcal, {meal['total_protein']} g protein \n")
 
-# ===== 原 Weekly 逻辑 =====
+# 原 Weekly 逻辑
+# Original Weekly logic
 print("=== Weekly Plan (Default: Random Strategy) ===")
 weekly_plan = generate_weekly_meal_plan(conn, meal_structure="two_meals")
 for day in weekly_plan:
@@ -31,10 +32,12 @@ for day in weekly_plan:
     print("-" * 60)
 
     # 打印每顿主餐详情
+    # Print the details of each main meal
     for meal in day["meals"]:
         print_main_meal(meal)
 
     # 如果有snack，打印snack详情
+    # If there is a snack, print the details of the snack
     snack = day["snack_option"]
     print(f"Snack option({'Allowed' if day['snack_allowed'] else 'Optional only'}):")
     for category, item in snack["snack_items"].items():
@@ -42,12 +45,14 @@ for day in weekly_plan:
     print(f"  →  Total:{snack['total_calorie']} kcal, {snack['total_protein']} g protein")
     print("=" * 60)
 
-# ===== 现测试Greedy Strategy =====
+# 测试Greedy Strategy
+# Test Greedy Strategy
 print("\n=== Greedy Strategy Test ===")
 meal = generate_main_meal(conn, calorie_target=850, protein_range=(60,75), strategy=get_strategy("greedy"))
 print_main_meal(meal)
 
-# ===== 现测试Weighted Strategy =====
+# 测试Weighted Strategy
+# Test Weighted Strategy
 print("=== Weighted Strategy Test ===")
 meal = generate_main_meal(conn, calorie_target=850, protein_range=(60,75), strategy=get_strategy("weighted"))
 print_main_meal(meal)

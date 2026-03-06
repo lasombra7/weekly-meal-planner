@@ -3,6 +3,7 @@ import math
 def evaluate_weekly_plan(daily_metrics_list: list[dict]) -> dict:
     """
     对一周的 daily_metrics 进行评估。
+    Evaluate the daily_metrics for one week.
     """
 
     if not daily_metrics_list:
@@ -11,18 +12,22 @@ def evaluate_weekly_plan(daily_metrics_list: list[dict]) -> dict:
     days = len(daily_metrics_list)
 
     # 第一步：平均偏差
+    # Step 1: Average deviation
     avg_calorie_deviation = sum(d["calorie_deviation"] for d in daily_metrics_list) / days
     avg_protein_deviation = sum(d["protein_deviation"] for d in daily_metrics_list) / days
 
     # 第二步：失败天数统计
+    # Step 2: Statistics of the number of failed days
     calorie_failure_days = sum(not d["within_calorie_range"] for d in daily_metrics_list)
     protein_failure_days = sum(not d["within_protein_range"] for d in daily_metrics_list)
 
     # 第三步：snack 使用率
+    # Step 3: snack usage rate
     snack_days = sum(d.get("snack_allowed", False) for d in daily_metrics_list)
     snack_usage_rate = snack_days / days
 
     # 第四步：稳定性（标准差）
+    # Step 4: Stability (Standard deviation)
     calorie_devs = [d["calorie_deviation"] for d in daily_metrics_list]
     protein_devs = [d["protein_deviation"] for d in daily_metrics_list]
     calorie_mean = avg_calorie_deviation
@@ -31,6 +36,7 @@ def evaluate_weekly_plan(daily_metrics_list: list[dict]) -> dict:
     protein_std = math.sqrt(sum((x - protein_mean) ** 2 for x in protein_devs) / days)
 
     # 第五步： assemble weekly metrics
+    # Step 5: assemble weekly metrics
     weekly_metrics = {
         "avg_calorie_deviation": round(avg_calorie_deviation, 1),
         "avg_protein_deviation": round(avg_protein_deviation, 1),

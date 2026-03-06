@@ -8,6 +8,10 @@ def generate_daily_meal_with_structure(conn, target_cal, protein_range, meal_str
     区分生成 two_meal_day 还是 three_meal_day。
     two_meal_day: Lunch 分配 40% calorie, 40% protein。 Dinner 分配 60% calorie, 60% protein。
     three_meal_day: Breakfast 分配 25% calorie, 25% protein。 Lunch 分配 35% calorie, 35% protein。 Dinner 分配 40% calorie, 40% protein。
+
+    Distinguish between "two_meal_day" and "three_meal_day".
+    For "two_meal_day": Lunch is allocated 40% of calories and 40% of protein. Dinner is allocated 60% of calories and 60% of protein.
+    For "three_meal_day": Breakfast is allocated 25% of calories and 25% of protein. Lunch is allocated 35% of calories and 35% of protein. Dinner is allocated 40% of calories and 40% of protein.
     """
 
     if meal_structure == "two_meals":
@@ -18,32 +22,39 @@ def generate_daily_meal_with_structure(conn, target_cal, protein_range, meal_str
         raise ValueError("Unknown meal_structure")
 
 # 两餐制分配比例
+# The proportion of two-meal system allocation
 TWO_MEAL_DISTRIBUTION = {"lunch": 0.45,"dinner": 0.55}
 assert abs(
     TWO_MEAL_DISTRIBUTION["lunch"] + TWO_MEAL_DISTRIBUTION["dinner"] - 1.0
 ) < 1e-6, "TWO_MEAL_DISTRIBUTION ratios must sum to 1.0"
 
 # 三餐制分配比例
+# The distribution ratio of the three-meal system
 THREE_MEAL_DISTRIBUTION = {"breakfast": 0.25, "lunch": 0.35, "dinner": 0.4}
 assert abs(
     THREE_MEAL_DISTRIBUTION["breakfast"] + THREE_MEAL_DISTRIBUTION["lunch"] + THREE_MEAL_DISTRIBUTION["dinner"] - 1.0
 ) < 1e-6, "THREE_MEAL_DISTRIBUTION ratios must sum to 1.0"
 
 # 生成main
+# Generate main
 def generate_main_meal(conn, calorie_target, protein_range, strategy=None):
     """
     从数据库中随机组合出一组正餐，这组正餐将由main, protein, vegetable组成,并尽量靠近设定的热量与蛋白质目标。
-    返回包含type, meal_item, total_calorie, total_protein的词典
+    返回包含type, meal_item, total_calorie, total_protein的词典。
+    Randomly select a set of meals from the database. These meals will consist of main courses, proteins, and vegetables.
+    It will try to closely match the set calorie and protein targets. Return a dictionary containing the fields: type, meal_item, total_calorie, total_protein.
     """
     if strategy is None:
         strategy = get_strategy("random")
 
     # 获取所有的分类数据
+    # Obtain all the classified data
     mains = get_foods("main", conn)
     proteins = get_foods("protein", conn)
     vegetables = get_foods("vegetable", conn)
 
     # 由策略决定如何选择食材
+    # Choose ingredients is determined by strategy
     main = strategy.pick_main(mains)
     protein = strategy.pick_protein(proteins)
     vegetable = strategy.pick_vegetable(vegetables)
@@ -55,6 +66,7 @@ def generate_main_meal(conn, calorie_target, protein_range, strategy=None):
     }
 
     # 计算总热量和蛋白质
+    # Calculate the total calories and protein
     total_cal = sum(item["calorie_per_100g"] * item["grams"] / 100 for item in meal.values())
     total_protein = sum(item["protein_per_100g"] * item["grams"] / 100 for item in meal.values())
 
@@ -69,14 +81,18 @@ def generate_main_meal(conn, calorie_target, protein_range, strategy=None):
     return result
 
 # 生成加餐
+# Generate a snack
 def generate_snack(conn):
     """
     从数据库中随机组合出一次snack，snack由fruit和dairy组成。
     返回包含type, items, total_calorie, total_protein的词典。
+    Randomly select a snack from the database.
+    The snack consists of fruit and dairy. Return a dictionary containing the type, items, total calorie, and total protein.
     """
     cursor = conn.cursor(dictionary=True)
 
     # 获取所有的分类数据
+    # Obtain all the classified data
     fruit = random.choice(get_foods("fruit", conn))
     dairy = random.choice(get_foods("dairy", conn))
 
@@ -98,10 +114,16 @@ def generate_snack(conn):
 def scale_main_meal_portions(meal,target_cal, protein_range):
     """
     对单顿 maim 进行分量缩放：
-    - vegetable 先固定为 200g
-    - protein / main 走离散档位搜索，
-    - 优先满足硬约束，若失败则fallback
-    - 增加 decision_trace 用于解释 protein 决策
+    - vegetable 先固定为 200g。
+    - protein / main 走离散档位搜索。
+    - 优先满足硬约束，若失败则fallback。
+    - 增加 decision_trace 用于解释 protein 决策。
+
+    Perform scaling of the single component "maim":
+    - Set "vegetable" to 200g first.
+    - For "protein/main", conduct discrete-level search.
+    - Prioritize satisfying hard constraints; if unsuccessful, fallback.
+    - Add "decision_trace" to explain the decision of "protein".
     """
 
     protein_lower_bound, protein_upper_bound = protein_range
@@ -112,9 +134,11 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
     main_options = [50, 100, 150, 200, 250, 300, 350, 400]
 
     # 固定蔬菜200g
+    # Fixed vegetables 200g
     meal["meal_items"]["vegetable"]["grams"] = 200
 
     # 根据每100g营养素和实际克重计算总值
+    # The total value is calculated based on each 100g of nutrients and the actual gram weight
     def calc_totals(items):
         total_cal = 0.0
         total_protein = 0.0
@@ -128,16 +152,19 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
         best_candidate = None
         best_score = None
         # 权重：蛋白优先
+        # Weight: Protein first
         protein_weight = 4 if strict_mode else 3
         calorie_weight = 1
 
         # 先遍历protein，再遍历main
+        # First iterate over protein, then iterate over main items
         for p_g in protein_options:
             meal["meal_items"]["protein"]["grams"] = p_g
             for m_g in main_options:
                 meal["meal_items"]["main"]["grams"] = m_g
                 total_cal, total_protein = calc_totals(meal["meal_items"])
                 # 硬约束：不允许超过 calorie & protein upper bound
+                # Hard constraint: Do not exceed the calorie & protein upper bound
                 if total_cal > calorie_upper_bound:
                     continue
                 if total_protein > protein_upper_bound:
@@ -147,6 +174,7 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
                         continue
 
                 # 评分规则：优先接近protein_target，再接近calorie_target
+                # Scoring rule: Prioritize proximity to protein_target, then proximity to calorie_target
                 protein_gap = abs(total_protein - protein_target)
                 calorie_gap = abs(total_cal - target_cal)
                 score = protein_weight * protein_gap + calorie_weight * calorie_gap
@@ -154,6 +182,7 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
                     best_score = score
                     best_candidate = {
                         # 用于输出菜单
+                        # Used for the output
                         "main_g": m_g,
                         "protein_g":p_g,
                         "vegetable_g": 200,
@@ -161,6 +190,7 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
                         "total_protein": total_protein,
 
                         # 用于生成解释
+                        # Used for generating explanations
                         "protein_gap": protein_gap,
                         "calorie_gap": calorie_gap,
                         "strict_mode": strict_mode,
@@ -170,14 +200,18 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
         return best_candidate
 
     # 先严格搜索
+    # Strict search first
     best_candidate = search(strict_mode=True)
     # 若失败，fallback。（若找不到完全满足的组合，做一次降级选择）
+    # If it fails, fallback. If no fully satisfactory combination can be found, make a downgrading choice.
     if best_candidate is None:
         best_candidate = search(strict_mode=False)
 
     # 把最优结果写回meal,并更新总宏
+    # Write the best result back to meal and update the master macro
     if best_candidate is not None:
         # 用于输出菜单
+        # Used for the output menu
         meal["meal_items"]["main"]["grams"] = best_candidate["main_g"]
         meal["meal_items"]["protein"]["grams"] = best_candidate["protein_g"]
         meal["meal_items"]["vegetable"]["grams"] = best_candidate["vegetable_g"]
@@ -185,6 +219,7 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
         meal["total_protein"] = round(best_candidate["total_protein"], 1)
 
         # 用于生成解释
+        # Used for generating explanations
         meal["decision_trace"] = {
             "strict_mode_used": best_candidate["strict_mode"],
             "protein_weight": best_candidate["protein_weight"],

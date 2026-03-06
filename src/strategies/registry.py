@@ -13,6 +13,8 @@ def get_strategy(name: str):
     """
     根据名称返回对应的策略。
     如果名称不存在则抛出明确错误。
+    Return the corresponding strategy based on the name.
+    If the name does not exist, a definite error is thrown.
     """
     if name not in _STRATEGY_REGISTRY:
         raise ValueError(

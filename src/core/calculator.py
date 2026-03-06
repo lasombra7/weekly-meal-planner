@@ -4,6 +4,7 @@ def calculate_targets(height_cm, weight_kg, age, sex="female", activity_level="m
     """
 
     # 统一数据类型
+
     height_cm = float(height_cm)
     weight_kg = float(weight_kg)
     age = int(age)

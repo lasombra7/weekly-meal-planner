@@ -10,6 +10,7 @@ try:
     weekly_plan = generate_weekly_meal_plan(conn)
 
     # 生成一周计划
+    # Generate a weekly plan
     print("\n========== DAILY TEST ==========\n")
 
     daily_metrics_list = []
@@ -32,6 +33,7 @@ try:
         print(metrics)
 
     # Weekly 聚合
+    # Weekly Aggregation
     print("\n========== WEEKLY TEST ==========\n")
     weekly_metrics = evaluate_weekly_plan(daily_metrics_list)
     print("====== Weekly Metrics ======")

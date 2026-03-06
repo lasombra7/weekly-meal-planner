@@ -5,8 +5,10 @@ def explain_daily_plan(
         generation_attempts: int | None = None
 ):
     """
-    为单日meal plan 生成 explainable metadata。
+    为单日meal plan 生成 explainable metadata
     注意：不修改daily_plan,不重新计算，只解释发生了什么
+    Generate explainable metadata for the one-day meal plan.
+    Note: Do not modify the daily_plan, do not recalculate, only explain what happened.
     """
 
     target = daily_plan["target"]
@@ -14,6 +16,7 @@ def explain_daily_plan(
     total_protein = daily_plan["total_protein"]
 
     # 第一步：识别binding constraints
+    # Step 1: Identify binding constraints
     binding_constraints = []
     if total_calorie < target["calorie"]:
         binding_constraints.append("calorie_lower_bound")
@@ -26,6 +29,7 @@ def explain_daily_plan(
         binding_constraints.append("protein_upper_bound")
 
     # 第二步：snake decision explain
+    # Step 2: snake decision explain
     snack_allowed = daily_plan["snack_allowed"]
     if total_calorie < target["calorie"]:
         snack_reason = "main_meals_below_calorie_target"
@@ -41,6 +45,7 @@ def explain_daily_plan(
     }
 
     # 第三步：Assemble explanation
+    # Step 3: Assemble explanation
     explanation = {
         "strategy": strategy_name,
         "meal_structure": meal_structure,

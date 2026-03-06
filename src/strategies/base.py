@@ -2,6 +2,8 @@ class MealStrategy:
     """
     用于指定饮食选择策略的基类。
     策略决定的是食物的选择方式，而不是合适生成食物或者生成多少餐食。
+    A base class used to specify dietary choice strategies.
+    The strategy determines the way food is chosen, rather than the appropriate amount of food to be produced or the number of meals to be produced.
     """
     name = "base"
 
