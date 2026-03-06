@@ -52,6 +52,7 @@ The system is built on five guiding principles:
 
 ## System Architecture
 
+```
 User Input
    │
    ▼
@@ -74,6 +75,7 @@ Weekly Evaluation
    │
    ▼
 Database Persistence (MySQL)
+```
 
 ---
 
