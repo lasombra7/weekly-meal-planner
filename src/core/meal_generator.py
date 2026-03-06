@@ -146,7 +146,7 @@ def scale_main_meal_portions(meal,target_cal, protein_range):
                     if total_cal < calorie_lower_bound:
                         continue
 
-                # 评分规则：优先接近protein_tol_low，再热量接近target
+                # 评分规则：优先接近protein_target，再接近calorie_target
                 protein_gap = abs(total_protein - protein_target)
                 calorie_gap = abs(total_cal - target_cal)
                 score = protein_weight * protein_gap + calorie_weight * calorie_gap
