@@ -50,6 +50,63 @@ The system is built on five guiding principles:
 
 ---
 
+## System Architecture
+
+```
+User Input
+   │
+   ▼
+Target Calculator
+   │
+   ▼
+Meal Structure Selection
+   │
+   ▼
+Strategy-Based Food Selection
+   │
+   ▼
+Meal Generator
+   │
+   ▼
+Explanation Layer
+   │
+   ▼
+Weekly Evaluation
+   │
+   ▼
+Database Persistence (MySQL)
+```
+
+---
+
+## Installation
+Clone the repository:
+
+```bash
+git clone https://github.com/lasombra7/weekly-meal-planner.git
+cd weekly-meal-planner
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Set up the database:
+
+```bash
+mysql < sql/setup.sql
+```
+
+Run the demo:
+
+```bash
+python run_demo.py
+```
+
+---
+
 ## System Architecture Overview
 
 The system is structured as a layered planning pipeline:
