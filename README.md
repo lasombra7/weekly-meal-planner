@@ -36,17 +36,16 @@ The system is built on five guiding principles:
 
 ## 🚀 v1.0 Features
 
-- Search-based portion scaling
-- Multi-objective macro scoring
-- Strict constraint + fallback mechanism
-- Decision trace for explainable optimization
-- Generates a full **7-day meal plan**
-- Supports **2-meal or 3-meal daily structures**
-- Automatically determines whether a snack can be added
+- Automatic **7-day meal plan generation**
+- Calorie and protein **target-based planning**
+- Support for **2-meal and 3-meal daily structures**
 - Strategy-based food selection framework
+- Constraint-aware macro balancing
+- Optional snack generation
+- **Explainable decision tracing**
+- Weekly evaluation metrics (calorie deviation, protein deviation, stability)
+- Visitor mode demo for quick system testing
 - Persistent weekly plan storage for registered users
-- Visitor (guest) mode without persistence
-- Weekly evaluation support
 
 ---
 
