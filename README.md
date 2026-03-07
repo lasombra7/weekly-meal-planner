@@ -138,6 +138,7 @@ Average Calorie Deviation: -271.3
 Protein Failure Days: 0
 Snack Usage Rate: 0.29
 ```
+
 ---
 
 ## System Architecture Overview
@@ -218,10 +219,18 @@ Strategies are registered centrally and injected at runtime without modifying co
 
 ### Phase 1: Database Design ✅ *(Completed)*
 
-- Built 8 normalized nutrition tables  
-- Designed structured schemas for food categories  
-- Added sample data with UTF-8 (Chinese) support  
-- Exported schema and seed data via MySQL Workbench  
+**Goal:**  
+Design a structured MySQL database to store nutrition data and support meal generation.
+
+**Design Focus:**
+- Create normalized tables for different food categories
+- Ensure the schema supports extensible nutrition attributes
+- Prepare seed data for development and testing
+
+**Completed Tasks**
+- [x] Built 8 normalized nutrition tables  
+- [x] Designed structured schemas for food categories  
+- [x] Exported schema and seed data via MySQL Workbench
 
 ---
 
@@ -230,13 +239,10 @@ Strategies are registered centrally and injected at runtime without modifying co
 **Goal:**  
 Use Python to connect with MySQL and generate balanced 7-day meal plans under strict nutritional constraints.
 
-**Implemented Logic:**
-- Two main meals must satisfy:
-  - **Calorie range:** 1600–1800 kcal  
-  - **Protein range:** 130–150 g  
-- Snack is optional and evaluated daily:
-  - Only added if main meals < 1700 kcal  
-  - Must not exceed daily upper bounds  
+**Design Focus:**
+- Integrate Python with MySQL to enable programmatic meal generation
+- Implement constraint-based planning under calorie and protein limits
+- Introduce optional snack logic if main meals < 90% target_cal
 
 **Completed Tasks**
 - [x] MySQL → Python integration  
