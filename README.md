@@ -139,39 +139,6 @@ Snack Usage Rate: 0.29
 ```
 
 ---
-
-## System Architecture Overview
-
-The system is structured as a layered planning pipeline:
-
-User / Visitor Input  
-- Target Calculation (calorie & protein)  
-- Meal Structure Selection (2-meal / 3-meal)  
-- Strategy-Based Food Selection  
-- Constraint-Based Meal Generation  
-- Weekly Plan Persistence (User Mode)
-
-This separation allows independent experimentation with:
-- user modeling
-- meal structure
-- food selection strategies
-- constraint logic
-
----
-
-## Algorithmic Flow
-
-For each day:
-1. Compute macro targets (calorie / protein)
-2. Allocate per-meal macro distribution
-3. Select food items via strategy abstraction
-4. Apply discrete portion scaling
-5. Validate against macro constraints
-6. Apply fallback search if needed
-7. Evaluate daily metrics
-8. Store snapshot
-
----
 ## Technical Design
 
 **Language:** Python  
@@ -273,33 +240,6 @@ The current rule-based planner can be extended toward optimization, learning-bas
 - Diversity-aware food rotation
 - Adaptive macro targeting
 
-### 4. Explainable Planning Algorithms
-- Traceable food selection reasoning
-- Constraint satisfaction transparency
-- Version-controlled generation logic
-- Reproducible weekly plan snapshots
-
-### 5. Food Diversity & Statistical Analysis
-- Food group coverage metrics
-- Weekly diversity scoring
-- Macro distribution variance tracking
-- Longitudinal user nutrition pattern analysis
-
-### 6. Scalable Health Data Platform
-- Structured food taxonomy (food_group / food_subgroup)
-- Macro-aware database schema
-- Version-controlled plan storage
-- Research-ready experimental framework
-
-## Research-Oriented Extensions
-
-This system can evolve toward:
-- Linear Programming (LP-based macro balancing)
-- Multi-objective optimization (macro + diversity + cost)
-- Preference learning via user interaction feedback
-- Reinforcement learning for adaptive meal scheduling
-- Longitudinal nutrition pattern analysis
-
 ---
 
 ## Summary
@@ -312,15 +252,6 @@ It is a **data-driven, constraint-based, and extensible planning framework** bui
 - Strategy-driven food selection
 - Portion-aware meal generation
 - Persistence and evaluation logic
-
-The system integrates:
-
-- Structured SQL databases (raw-standardized, per-100g macro schema)
-- Target-driven protein scaling
-- Rule-based and strategy-based generation logic
-- User modeling and personalization
-- Explainability, evaluation, and weekly stability metrics
-- Forward-compatible macro support (carb/fat ready)
 
 Version 1.0 focuses on calorie- and protein-driven planning with explainable 
 evaluation metrics. The architecture is intentionally designed to support 
