@@ -158,8 +158,6 @@ The system decouples:
 | `main` | Staple foods(carbohydrate-dominant) | id, name, food_group, food_subgroup, calorie_per_100g, protein_per_100g, carb_per_100g, fat_per_100g |
 | `protein` | Protein sources (raw standardized) | id, name, food_group, food_subgroup, calorie_per_100g, protein_per_100g, carb_per_100g, fat_per_100g |
 | `vegetable` | Vegetables | id, name, food_group, food_subgroup, calorie_per_100g, protein_per_100g, carb_per_100g, fat_per_100g |
-| `oil` | Fats & oils | id, name, food_group, food_subgroup, calorie_per_100g, protein_per_100g, carb_per_100g, fat_per_100g |
-| `seasoning` | Seasonings | id, name, food_group, food_subgroup, calorie_per_100g, protein_per_100g, carb_per_100g, fat_per_100g |
 | `fruit` | Fruits (used for snacks) | id, name, food_group, food_subgroup, calorie_per_100g, protein_per_100g, carb_per_100g, fat_per_100g |
 | `dairy` | Dairy (used for snacks) | id, name, food_group, food_subgroup, calorie_per_100g, protein_per_100g, carb_per_100g, fat_per_100g |
 | `user_profile` | Persistent user attributes | user_id, height_cm, weight_kg, age, sex, activity_level, goal, created_at |
@@ -204,7 +202,7 @@ Refactored the generator into a strategy-driven planning system.
 
 ### Phase 4: Personalization & Meal Structure ✅
 Added user-driven target calculation and flexible daily meal structures.
-- User / visitor modes
+- User / Visitor modes
 - Dynamic calorie and protein targets
 - 2-meal and 3-meal planning
 - Persistent weekly plan storage
